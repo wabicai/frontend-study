@@ -293,3 +293,11 @@ console.log(10);
 **在执行微队列microtask queue中任务的时候，如果又产生了microtask，那么会继续添加到队列的末尾，也会在这个周期执行，直到microtask queue为空停止。**
 
 注：当然如果你在microtask中不断的产生microtask，那么其他宏任务macrotask就无法执行了，但是这个操作也不是无限的，拿NodeJS中的微任务process.nextTick()来说，它的上限是1000个
+
+ 
+
+
+
+## **setTimeout、Promise、Async/Await 的区别** 
+
+https://blog.csdn.net/yun_hou/article/details/88697954 

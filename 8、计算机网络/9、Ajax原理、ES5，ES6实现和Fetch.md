@@ -2,7 +2,7 @@
 [Ajax原理一篇就够了](https://segmentfault.com/a/1190000017396192)
 [fetch 如何请求常见数据格式](https://juejin.cn/post/6844903619356000263)
 [Ajax的面向对象的封装(ES5和ES6)ajax+php](https://blog.csdn.net/liliang250/article/details/109239333)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20210309104232938.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FidWFuZGVu,size_16,color_FFFFFF,t_70)
+<img src="https://img-blog.csdnimg.cn/20210309104232938.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FidWFuZGVu,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" style="zoom:80%;" />
 
 
 @[TOC]
@@ -372,3 +372,68 @@ function getExternal(){
 }
 
 ```
+
+# 五、ajax、axios、fetch 优缺点对比
+
+## $.ajax
+
+> ajax 即 Asynchronous Javascript And XML（异步 JS 和 XML），是指一种创建交互式网页应用的网页开发技术
+
+缺点：
+
+- 本身是针对 `MVC` 的变成，不符合现在前端 `MVVM` 的浪潮
+- 基于原生的 `XHR` 开发， `XHR` 本身架构不清晰，已经有了 `fetch` 的替代方案
+- `JQ` 项目太大，单纯使用 `ajax` 就要引入 `jq` 非常不合理
+- 无法防御 `XSS` 和 `CSRF` 
+- 不符合关注点分离原则
+
+## fetch
+
+> 号称 `ajax` 的替代品，是在 `ES6` 中出现的，使用了 `ES6` 中的 `Promise` 对象。
+>
+> fetch 是基于 `Promise` 设计的
+
+```
+fetch` 不是 `ajax` 的进一步封装，而是使用原生 `js` ，没有使用 `XHR
+```
+
+优点：
+
+- 符合关注分离，没有将输入、输出和用时间来跟踪的状态混杂在一个对象里
+- 更好更方便的写法
+- 更加体层，提供的 `API` 丰富
+- 脱离了 `XHR` ，是 `ES` 规范里新的实现
+- 只对网络请求报错，对 `400` 、 `500` 都当作成功的请求，需要封装去处理
+
+缺点：
+
+- 默认不会带 `cookie` ，需要添加配置项
+- 不支持 `abort` ，不支持超时控制，使用 `setTimeout` 及 `Promise.reject` 的实现的超时控制并不能阻止请求过程继续在后台运行，造成了量得浪费
+- 没有办法原生检测请求的进度，而 `XHR` 可以
+
+
+
+## axios
+
+> axios 是基于 `Promise` 用于浏览器和 `node.js` 的 `http` 客户端
+
+优点：
+
+- 从 `node.js` 创建 `http` 请求
+- 支持 `Promise API`
+- 在浏览器中创建 `XHR` ，在 `node.js` 中则创建 `http` 请求（自动性强）
+- 支持拦截请求和响应
+- 转换请求和响应数据
+- 支持取消请求
+- 自动转换 `JSON` 数据
+- 支持防御 `XSS` 和 `CSRF` 
+- 既提供了并发的封装，也没有 `fetch` 的各种问题，体积也比较小。
+
+其流程图如下：
+
+![image](https://cdn.nlark.com/yuque/0/2021/jpeg/587100/1615082769724-c07eaf5c-485d-40a8-ab52-5726ac6cb108.jpeg)
+
+## 参考链接
+
+- [ajax、axios、fetch之间优缺点重点对比](https://zhuanlan.zhihu.com/p/58062212) 
+- [ajax和axios、fetch的区别](https://www.jianshu.com/p/8bc48f8fde75) 

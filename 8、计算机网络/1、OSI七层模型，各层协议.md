@@ -1,3 +1,15 @@
+## 基础知识
+
+1. ARP协议，发广播，在同一网段，获取MAC地址 （11111会发全部人）
+
+2. ARP是有缓存的
+
+3. 集线器（hub）也是同一网段，半双工，广播，没有缓存功能，是个智障
+
+4. 网桥有智商，有ARP地址表，能隔离冲突域。记录在左边还是右边
+
+5. 交换机：网桥+集线器。全双工，局域网的最终方案。可以记住接口对应的位置
+
 
 
 ## 对应的设备
@@ -18,3 +30,5 @@
 5. 会话层：NFC。负责建立管理、终止进程的会话
 6. 表示层：将看到的页面与二进制转化。数据的压缩、解压等。表现出来就是文件拓展名
 7. 应用层：（HTTP、DNS、FTP）协议。确定通信对象。为操作系统提供访问网络的接口
+
+![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAxOC83LzI5LzE2NGU1MjkzMDlmMGZhMzM?x-oss-process=image/format,png)

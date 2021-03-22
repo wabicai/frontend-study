@@ -501,7 +501,7 @@ export default {
 ```
 虽说provide 和 inject 主要为高阶插件/组件库提供用例，但如果你能在业务中熟练运用，可以达到事半功倍的效果！
 
-# 方法六、$parent / $children与 ref
+# 方法六、`$parent `/` $children`与 ref
 
 - ref：如果在普通的 DOM 元素上使用，引用指向的就是 DOM 元素；如果用在子组件上，引用就指向组件实例
 - `$parent / $children`：访问父 / 子实例
