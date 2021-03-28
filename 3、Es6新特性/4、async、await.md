@@ -307,3 +307,71 @@ async function myFunction() {
   });
 }
 ```
+
+
+
+# 3、await怎么捕获异常
+
+1. 除了使用 .catch 来错误异常，还可以使用 try/catch 来捕获异常
+
+```js
+async handleSubmit () {
+    await Promise.all([a(), b()]).then(r => {
+        console.log(r)
+    }).catch(err => {
+        console.log(err)
+    })
+}
+async handleSumbit () {
+    try {
+        await Promise.all([a(), b()])
+        return true
+    } catch (err) {
+        console.log(err)
+        return false
+    }
+}
+async validate () {
+    try {
+        await Promise.all([...validators.map(vm => vm.validate())])
+        return true
+    } catch (err) {
+        return false
+    }
+},
+```
+
+2. throw  new Error()
+
+# 4、Promise.all的缺陷
+
+- promise.all如果有一个失败了不会继续执行，会直接进入catch，失败原因的是第一个失败 `promise` 的结果
+
+1. 这样的话会导致关联性太强，解决办法？
+
+   1. 解决：方法一：在每一个promise后面设置catch，里面返回一个resolve就行了（本质就是返回一个resolve，还有其他方法实现，都是基于这个原理）
+
+   2. ```js
+      const  p1 =  new Promise(resolve => {
+          const a =b;
+          resolve(a);
+      }).catch(()=>{
+          return Promise.resolve('aaab')
+      });
+      const  p2 =  new Promise(resolve => {
+          const a =1;
+          return resolve(a);
+      }).catch(()=>{
+          return Promise.resolve('aaa')
+      });
+       
+       
+      Promise.all([p1,p2]).then((data)=>{
+          console.log('then 成功',data);
+      }).catch((err)=>{
+          console.log('333');
+          console.log('errr',err);
+      })
+      ```
+
+   3. 方法二：用allSettled。

@@ -1,14 +1,71 @@
+## Doctype
+
+< Doctype > 标签申明位于文档的开头，用于告诉浏览器以什么样的方式来渲染页面，有混杂模式和严格模式两种
+
+**混杂模式**向后兼容，模拟老浏览器，防止浏览器版本过旧不兼容页面
+
+**严格模式**是将JS和排版以浏览器最高的标准运行
+
+
+
 ## 一、缓存的规则
 
+结论提前说:
+
+1. 强缓存**Expires**：Thu，15 Apr  2010  20：00：00  GMT/**Cache-Control**：max-age=315360000, public 在本地内存里面读取到上一次发送的HTTP请求里面的响应头的数据。没过期就直接用。
+2. 客户端发送**Etag / Last-Modified**到服务器，服务器进行判断，在服务端设置：（If-None-Match：Etag是否相同  / if-Modified-Since 是否修改 ），然后 （新内容 200 ，旧内容 304）
+
 > HTTP的缓存属于客户端缓存，用于储存一些不经常变化的静态文件（图片、css、js等）。我们将缓存分为强制缓存和协商缓存
+
+服务器上的数据是会有更新的，我们不能一直使用浏览器的本地缓存，这样就只能一直使用旧数据。我们希望当服务器的数据发生更新时，浏览器会请求更新数据，如果服务器上的数据没有更新我们就使用本地数据，这样能节省因网络请求而产生的资源浪费。
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20210308194202184.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FidWFuZGVu,size_16,color_FFFFFF,t_70)
+明确两点：
+
+1、**浏览器每次发起请求，都会先在浏览器缓存中查找该请求的结果以及缓存标识**
+
+2、**浏览器每次拿到返回的请求结果都会将该结果和缓存标识存入浏览器缓存中**
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20210308194235693.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FidWFuZGVu,size_16,color_FFFFFF,t_70)
 
 #### 1、强制缓存
 
 当缓存数据库中已有所请求的数据时。客户端直接从缓存数据库中获取数据。当缓存数据库中没有所请求的数据时，客户端的才会从服务端获取数据。
 
+（虽然没有发出真实的 `http` 请求）请求状态码返回是 `200`
+
+>关键词：**不发送请求**
+>
+>强缓存就是强制缓存，直接读取浏览器缓存。如果在服务器响应的头部字段中设置了**cache-control：max-age=xxx，public/private/immutable**，都有强制缓存，**只要缓存的有效时间（xxx秒）没过，就直接读取浏览器缓存**。如果是用户主动刷新页面，会发起http请求资源，有额外的请求消耗，但是如果设置的是immutable即使用户刷新也直接读取浏览器缓存。 
+
+**强缓存有两种策略，对应HTTP1.0，和HTTP1.1。**
+
+##### **Expires策略（HTTP1.0）**
+
+>Expires是Web服务器响应消息头字段，在响应http请求时告诉浏览器在过期时间前浏览器可以直接从浏览器缓存取数据，而无需再次请求。
+>Expires设置失效时间，精确到时分秒。 不过Expires 是HTTP 1.0的东西，现在默认浏览器均默认使用HTTP 1.1，所以它的作用基本忽略。
+
+##### **Cache-control策略（重点关注）**
+
+> Cache-Control与Expires的作用一致，都是指明当前资源的有效期，控制浏览器是否直接从浏览器缓存取数据还是重新发请求到服务器取数据。只不过Cache-Control的选择更多，设置更细致，如果同时设置的话，其优先级高于Expires。
+
+>http协议头Cache-Control ： 值可以是public、private、no-cache、no-store、no-transform、must-revalidate、proxy-revalidate、max-age
+
 #### 2、协商缓存 
 
 客户端会先从**缓存数据库中获取到一个缓存数据的标识**，得到标识后请求服务端验证是否失效（新鲜），如果没有失效服务端会返回304，此时客户端直接从缓存中获取所请求的数据，如果标识失效，服务端会返回更新后的数据。
+
+>关键词：
+>**协商缓存：200，304，发送请求
+>Last-Modifined -> If-Modified-Since 修改时间
+>Etag -> If-None-Match 服务器唯一标识**
+
+ 当浏览器请求资源时发现缓存过期，就会去请求服务器进行协商缓存。在之前的服务器响应的头部中，还有两个字段与协商缓存有关
+
+> etag: '5c20abbd-e2e8'
+> last-modified: Mon, 24 Dec 2018 09:49:49 GMT
+
+etag是一个文件hash，每个文件唯一。
+
+last-modified是文件最后更新的时间。在协商缓存时浏览器的请求会携带这两个字段，服务器会根据这两个标识对比判断文件是否更新，**如果发生了更新就会返回200状态码，和第一次请求资源一样；如果没有更新就会返回304，调用浏览器缓存**。 
 
 ## 二、服务器是如何判断缓存是否失效
 
@@ -16,22 +73,25 @@
 
 #### ![img](http://www.361way.com/wp-content/uploads/2017/01/response-headers.png)1. 强缓存
 
-**Expires**：Thu，15 Apr  2010  20：00：00  GMT
+##### **Expires**：Thu，15 Apr  2010  20：00：00  GMT
 
 由于服务端时间和客户端时间可能有误差，现在都用**Cache-Control**
 
-**Cache-Control**：Cache-Control有很多属性，不同的属性代表的意义也不同。
+##### **Cache-Control**：
+
+Cache-Control有很多属性，不同的属性代表的意义也不同。
+
 private：客户端可以缓存
 public：客户端和代理服务器都可以缓存
 max-age=t：缓存内容将在t秒后失效
-no-cache：需要使用协商缓存来验证缓存数据
+no-cache：需要使用协商缓存来验证缓存数据,no-cache代表不缓存过期的资源
 no-store：所有内容都不会缓存。
 
 
 
 #### 2. 协商缓存
 
-1. **Last-Modified**
+##### 1. **Last-Modified**
 
 Last-Modified： 服务器在响应请求时，**会告诉浏览器资源的最后修改时间**。
 
@@ -42,7 +102,7 @@ if-Unmodified-Since: 从字面上看, 就是说: 从某个时间点算起, 是�
 - 这两个的区别是一个是修改了才下载一个是没修改才下载。
 - Last-Modified 说好却也不是特别好，因为如果在服务器上，一个资源被修改了，但其实际内容根本没发生改变，会因为Last-Modified时间匹配不上而返回了整个实体给客户端（即使客户端缓存里有个一模一样的资源）。为了解决这个问题，HTTP1.1推出了Etag。
 
-2. **Etag**
+##### 2. **Etag**
 
 Etag：服务器响应请求时，通过此字段告诉浏览器当前资源在服务器生成的唯一标识（生成规则由服务器决定）
 
@@ -55,13 +115,23 @@ If-None-Match：再次请求服务器时，浏览器的请求报文头部会包�
 
 
 
-## 三、缓存的优点 
+## 三、怎么强制使用协商缓存
+
+### 1. Cache-Contro：no-store
+
+### 2. Ctrl+F5
+
+### 3. Expires = 0 /-1 0
+
+### 4. 浏览器勾选：disable cache
+
+## 四、缓存的优点 
 
 1. 减少了冗余的数据传递，节省宽带流量
 2. 减少了服务器的负担，大大提高了网站性能
 3. 加快了客户端加载网页的速度 ------- 这也正是HTTP缓存属于客户端缓存的原因。
 
-## 四、不同刷新的请求执行过程 
+## 五、不同刷新的请求执行过程 
 
 1. 浏览器地址栏中写入URL，回车
    浏览器发现缓存中有这个文件了，不用继续请求了，直接去缓存拿。（最快）
@@ -70,4 +140,4 @@ If-None-Match：再次请求服务器时，浏览器的请求报文头部会包�
 3. Ctrl+F5
    告诉浏览器，你先把你缓存中的这个文件给我删了，然后再去服务器请求个完整的资源文件下来。于是客户端就完成了强行更新的操作.
 
-![image-20210321194948412](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20210321194948412.png)
+![image-20210327005224210](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20210327005224210.png)
