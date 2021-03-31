@@ -24,9 +24,10 @@
  1. setTimeout 
  2. setInterval 
  3. setImmediate (Node独有)
- 4.  requestAnimationFrame  (浏览器独有)
- 5.  I/O 
- 6. UI rendering (浏览器独有)
+  4. requestAnimationFrame  (浏览器独有)
+       1. requestAnimationFrame在[MDN的定义](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame)为，下次页面重绘前所执行的操作，而重绘也是作为宏任务的一个步骤来存在的，且该步骤晚于微任务的执行。严格来说，这个api不属于宏任务也不属于微任务，他的触发时间位于宏任务和微任务之间。
+  5. I/O 
+  6. UI rendering (浏览器独有)
 
 ## **微队列，microtask，也叫jobs。** 
 另一些异步任务的回调会依次进入micro task queue，等待后续被调用，这些异步任务包括：
@@ -34,7 +35,7 @@
  7. process.nextTick (Node独有)
  8.  Promise 
  9. Object.observe 
- 10. MutationObserver
+ 10. MutationObserver（用来监视 DOM 变动。比如节点的增减、属性的变动、文本内容的变动。）
 **（注：这里只针对浏览器和NodeJS）**
 
 # 浏览器的Event Loop
@@ -294,10 +295,99 @@ console.log(10);
 
 注：当然如果你在microtask中不断的产生microtask，那么其他宏任务macrotask就无法执行了，但是这个操作也不是无限的，拿NodeJS中的微任务process.nextTick()来说，它的上限是1000个
 
- 
+###  进阶题目：
 
+1. 
 
+```js
+//2 3 5 6 4 7 8 1
+setTimeout(() => {
+        console.log(1);
+    }, 0);
+    console.log(2);
+    async1()
 
-## **setTimeout、Promise、Async/Await 的区别** 
+    async function async1() {
+        console.log(3);
+        await async2();
+        console.log(4);
+        //对await进行改写
+        // new Promise((resolve)=>{
+        //     async2()
+        //     resolve(Promise.resolve())
+        // }).then(()=>{
+        //     console.log(4);
+        // })
+    }
+    requestAnimationFrame(() => {
+        console.log(8);
+    })
+    async function async2() {
+        console.log(5);
+    }
+    new Promise((resolve, reject) => {
+        console.log(6);
+        resolve();
+    }).then(() => {
+        console.log(7);
+    })
+```
 
-https://blog.csdn.net/yun_hou/article/details/88697954 
+2. ```js
+   async function async1() {
+               console.log('async1 start');
+               await async2();
+               console.log('async1 end');
+           }
+           
+           async function async2() {
+               console.log('async2 start');
+               return new Promise((resolve, reject) => {
+                   resolve();
+                   console.log('async2 promise');
+               })
+           }
+           
+           console.log('script start');
+           
+           setTimeout(function() {
+               console.log('setTimeout');
+           }, 0);
+           
+           async1();
+           
+           new Promise(function(resolve) {
+               console.log('promise1');
+               resolve();
+           }).then(function() {
+               console.log('promise2');
+           }).then(function() {
+               console.log('promise3');
+           });
+           
+           console.log('script end');
+   ```
+
+3. ```js
+   new Promise((resolve, reject) => {
+       console.log("async1 start");
+       console.log("async2");
+       resolve(Promise.resolve());
+   }).then(() => {
+       console.log("async1 end");
+   });
+   
+   new Promise(function (resolve) {
+       console.log("promise1");
+       resolve();
+   }).then(function () {
+       console.log("promise2");
+   }).then(function () {
+       console.log("promise3");
+   }).then(function () {
+       console.log("promise4");
+   });
+   ```
+
+   
+

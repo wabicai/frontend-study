@@ -1,3 +1,13 @@
+## 手写promise思路
+
+1. 因为promise传入的是一个函数，所以要在里面执行器立即执行 excutor(resolve,reject)，执行器函数是同步执行
+2. 定义resolve和reject函数
+3. resolve和reject是异步函数，将回调放入callbacks队列。（判断队列长度是否为0，不为零的话，外层套一个setTimeout，执行成功的回调）
+4. 回调队列里面是{onResolve(){},onReject(){}}这样的数组对象，所以在forEach的时候要调用onResolve/onReject函数
+5. 因为执行器有可能会抛出异常，所以对excutor执行器套一层try,catch。
+6. 在调用resove()函数的时候，他的this，是直接调用的，指向window，所以可以把this存起来。
+7. then方法同步执行，then里面的参数异步回调。也就是说先把then里面的方法定义了，等遇到resolve（）的时候才调用
+
 选自：[Promise不会？？看这里！！！史上最通俗易懂的Promise！！！](https://blog.csdn.net/weixin_33704234/article/details/91381041?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control&dist_request_id=1328603.26757.16150104467492477&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control)
 @[TOC]
 
