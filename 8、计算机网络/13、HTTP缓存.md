@@ -117,11 +117,13 @@ If-None-Match：再次请求服务器时，浏览器的请求报文头部会包�
 
 ## 三、怎么强制使用协商缓存
 
-### 1. Cache-Contro：no-store
+### 1. Cache-Contro：no-coach
+
+- （还是会缓存，只不过每一次都要去浏览器判断数据是否更新）
 
 ### 2. Ctrl+F5
 
-### 3. Expires = 0 /-1 0
+### 3. Expires = 0 /-1 
 
 ### 4. 浏览器勾选：disable cache
 
