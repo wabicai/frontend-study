@@ -1,14 +1,31 @@
 ## 一、验证方式
 
-1. **cookie**：客户端使用 cookie直接认证，需要设置 cookie为 httpOnly，可以防止 xss攻击。但是无法防止 csrf攻击。需要设置伪随机数 X-XSRF-TOKEN。（推荐！不需要处理 xss，并且xsrf 随机数有完善的应用机制）
+1. **cookie**：客户端使用 cookie直接认证。
+
+   1. 设置 cookie为 httpOnly，**可以防止 xss攻击。但是无法防止 csrf攻击**。需要设置伪随机数 X-XSRF-TOKEN。（推荐！不需要处理 xss，并且csrf 随机数有完善的应用机制）
+
+   2. SameSite可以防止 CSRF 攻击和用户追踪。
+
+      1. Strict：完全禁止第三方 Cookie，跨站点时，任何情况下都不会发送 Cookie。换言之，只有当前网页的 URL 与请求目标一致，才会带上 Cookie。
+
+         > 这个规则过于严格，可能造成非常不好的用户体验。比如，当前网页有一个 GitHub 链接，用户点击跳转就不会带有 GitHub 的 Cookie，跳转过去总是未登陆状态。
+
+      2. Lax：规则稍稍放宽，大多数情况也是不发送第三方 Cookie，但是导航到目标网址的 Get 请求除外。
+
+         > 设置了`Strict`或`Lax`以后，基本就杜绝了 CSRF 攻击。当然，前提是用户浏览器支持 SameSite 属性。
+
+      3. None：网站可以选择显式关闭`SameSite`属性，将其设为`None`。不过，前提是必须同时设置`Secure`属性（Cookie 只能通过 HTTPS 协议发送），否则无效。
+
 2. **自定义请求头**：客户端使用 auth授权头认证，token存储在 cookie中。这样可以防止 csrf攻击，但是需要防止xss攻击。，因为 csrf只能在请求中携带 cookie，而这里必须从 cookie中拿出相应的值并放到 authorization 头中。实际上cookie不能跨站（同源政策）被取出，因此可以避免 csrf 攻击。（适用于 ajax请求或者 api请求，可以方便的设置 auth头）
+
 3. **localstorage**：可以将token存储在 localstorage里面，需要防止xss攻击。实现方式可以在一个统一的地方复写请求头，让每次请求都在header中带上这个token， 当token失效的时候，后端肯定会返回401，这个时候在你可以在前端代码中操作返回登陆页面，清除localstorage中的token。（适用于 ajax请求或者 api请求，可以方便的存入 localstorage）
 
 ## 二、如何防止cookie劫持
 
 1. HttpOnly（解决XSS，只能通过HTTP链接获取，不能通过js代码获取cookie）
 2. secure（只能通过HTTPS传输数据，如果是 HTTP 连接则不会传递该信息）
-3. 在cookie中添加校验信息（如添加用户的环境信息，ip地址）
+3. 在cookie中添加校验信息（如添加用户的环境信息，ip地址,token）
+4. SameSite
 
 #### 怎么设置cookie有效期
 

@@ -1,3 +1,27 @@
+## Webpack核心概念
+
+#### 入口 :
+
+![image-20210407154732324](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20210407154732324.png)
+
+#### 输出：
+
+![image-20210407154748049](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20210407154748049.png)
+
+#### Loader：
+
+![image-20210407154835464](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20210407154835464.png)
+
+#### 插件：
+
+![image-20210407154922138](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20210407154922138.png)
+
+#### 模块/兼容性:
+
+![image-20210407155413032](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20210407155413032.png)
+
+
+
 ## webpack的原理和配置
 
 1. 基于node开发出来的，可以用node的所有指令
