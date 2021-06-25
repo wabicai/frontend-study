@@ -501,10 +501,20 @@ export default {
 ```
 虽说provide 和 inject 主要为高阶插件/组件库提供用例，但如果你能在业务中熟练运用，可以达到事半功倍的效果！
 
-# 方法六、`$parent `/` $children`与 ref
+# 方法六、`$parent `/` $children`与 refs（可以直接调用子组件方法） $root（访问根实例）
 
 - ref：如果在普通的 DOM 元素上使用，引用指向的就是 DOM 元素；如果用在子组件上，引用就指向组件实例
 - `$parent / $children`：访问父 / 子实例
+
+```js
+简介：
+//refs用法
+<component-a ref="comA"></component-a> 
+this.$refs.comA;
+refs 是一个对象，可以直接.出来。常用
+
+children和parent都是数组，因为下标容易改变，所以不常用
+```
 
 需要注意的是：这两种都是直接得到组件实例，使用后可以直接调用组件的方法或访问数据。我们先来看个用 ref来访问组件的例子：
 

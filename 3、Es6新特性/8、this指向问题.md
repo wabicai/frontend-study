@@ -334,3 +334,44 @@ var bar = obj.foo();
 bar(); //3
 ```
 通过上面两个列子，我们看到箭头函数的this绑定只取决于**外层（函数或全局）的作用域**，对于前面的4种绑定规则是不会生效的。它也是作为this机制的一种替换，解决之前this绑定过程各种规则带来的复杂性。
+
+# 例题：
+
+```js
+    let obj = {
+        x: 1,
+        fn1() {
+            console.log(this);
+            //指向obj
+            // console.log(this.x);
+        },
+        fn2: () => {
+            console.log(this);
+            //指向window
+            // console.log(this.x);
+        },
+        fn3: function () {
+            console.log(this);
+            //指向obj
+            // console.log(this.x);
+        },
+        fn4: function () {
+            return () => {
+                //指向obj
+                console.log(this);
+            }
+        },
+        fn5: function () {
+            //指向window
+            return function () {
+                console.log(this);
+            }
+        }
+    }
+    obj.fn1()
+    obj.fn2()
+    obj.fn3()
+    obj.fn4()()
+    obj.fn5()()
+```
+

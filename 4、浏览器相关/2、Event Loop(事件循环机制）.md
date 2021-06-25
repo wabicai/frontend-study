@@ -314,7 +314,7 @@ setTimeout(() => {
         //对await进行改写
         // new Promise((resolve)=>{
         //     async2()
-        //     resolve(Promise.resolve())
+        //     resolve()
         // }).then(()=>{
         //     console.log(4);
         // })
