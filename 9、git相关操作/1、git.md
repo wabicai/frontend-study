@@ -22,7 +22,7 @@
 
 ### fork、clone、branch
 
-- fork：复制一份代码到远程仓库，远程仓库是你自己。可以通过pull request贡献给元仓库
+- fork：复制一份代码到远程仓库，远程仓库是你自己。可以通过pull request贡献给原仓库
 - clone：复制一份代码到你自己的仓库，远程仓库是clone的仓库。
 - branch：新开分支。
 
