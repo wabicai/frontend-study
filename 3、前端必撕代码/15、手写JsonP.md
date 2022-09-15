@@ -8,7 +8,7 @@
             let requestNode = document.createElement("script")
             //创建请求
             requestNode.src = url;
-            <script src="">
+            // <script src="">
             Promise.race([setTimeout(function () {
                 reject("没有返回数据")
             }, timeout), window.cb = result => {
