@@ -31,5 +31,39 @@
 
 ## 什么是Fiber
 > Fiber 其实是一个数据结构，需要记录节点和节点之间的关系。
-> 我们回到 React 设计的元概念上：
-> 
+
+### Fiber能实现什么？
+1. pause work and come back to it later（暂停工作，并且能之后回到暂停的地方）
+2. assign priority to different types of work（安排不同类型工作的优先级）
+3. reuse previously completed work（之前已经处理完的工作单元，可以得到重用）
+4. abort work if it’s no longer needed（如果后续的工作不再需要做，工作可以直接被终止）
+
+那么这四个功能如何实现呢，这里需要看一下`Structure of Fiber` 和 `General algorithm` 两大模块。
+
+
+详情看：
+[Fiber](https://i.overio.space/fiber/whats-fiber/)
+
+
+## 那么为什么有React-Fiber，没有Vue-Fiber呢？
+详情看
+[为什么没有Vue-Fiber？](https://www.fly63.com/article/detial/11893)
+
+
+主要原因：
+- 上文提到修改数据时，react需要调用setState方法，而vue直接修改变量就行。看起来只是两个框架的用法不同罢了，但响应式原理正在于此。
+
+- 从底层实现来看修改数据：在react中，组件的状态是不能被修改的，setState没有修改原来那块内存中的变量，而是去新开辟一块内存；而vue则是直接修改保存状态的那块原始内存。
+
+- 所以经常能看到react相关的文章里经常会出现一个词"immutable"，翻译过来就是不可变的。
+
+- 数据修改了，接下来要解决视图的更新：react中，调用setState方法后，会自顶向下重新渲染组件，自顶向下的含义是，该组件以及它的子组件全部需要渲染；而vue使用Object.defineProperty（vue@3迁移到了Proxy）对数据的设置（setter）和获取（getter）做了劫持，也就是说，vue能准确知道视图模版中哪一块用到了这个数据，并且在这个数据修改时，告诉这个视图，你需要重新渲染了。
+
+- 所以当一个数据改变，react的组件渲染是很消耗性能的——父组件的状态更新了，所有的子组件得跟着一起渲染，它不能像vue一样，精确到当前组件的粒度。
+
+- 上面说了这么多，都是为了方便讲清楚为什么需要react fiber：在数据更新时，react生成了一棵更大的虚拟dom树，给第二步的diff带来了很大压力——我们想找到真正变化的部分，这需要花费更长的时间。js占据主线程去做比较，渲染线程便无法做其他工作，用户的交互得不到响应，所以便出现了react fiber。
+
+
+总结：
+1. react因为先天的不足——无法精确更新，所以需要react fiber把组件渲染工作切片；而vue基于数据劫持，更新粒度很小，没有这个压力；
+2. react fiber这种数据结构使得节点可以回溯到其父节点，只要保留下中断的节点索引，就可以恢复之前的工作进度；
