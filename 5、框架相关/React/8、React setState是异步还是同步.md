@@ -1,4 +1,5 @@
-详见：[seState是异步还是同步](https://juejin.cn/post/6850418109636050958)
+详见：
+[seState是异步还是同步](https://juejin.cn/post/6850418109636050958)
 [useState和setState](https://juejin.cn/post/6959885030063603743)
 
 # 结论：
