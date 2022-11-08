@@ -109,8 +109,11 @@ function openurl(url) {
 攻击类型
 
 - i）GET型：如在页面的某个 img 中发起一个 get 请求
+  - 因为自动携带cookie
 - ii）POST型：通过自动提交表单到恶意网站
+  - 模拟提交操作
 - iii）链接型：需要诱导用户点击链接
+  - 点击即攻击成功
 
 与XSS不同的是，XSS是攻击者直接对我们的网站A进行注入攻击，CSRF是通过网站B对我们的网站A进行伪造请求。
 
@@ -118,16 +121,66 @@ function openurl(url) {
 
 举个例子，你登录购物网站A之后点击一个恶意链接B，B请求了网站A的下单接口，结果是你在网站A的帐号真的会生成一个订单。其背后的原理是：网站B通过表单、get请求来伪造网站A的请求，这时候请求会带上网站A的cookies，若登录态是保存在cookies中，则实现了伪造攻击。
 
-#### 防御措施（推荐添加token / HTTP头自定义属性）
+### 防御措施（推荐添加token / HTTP头自定义属性）
+- 防御思路：
+1. 阻止不明外域的访问
+   1. 同源检测
+   2. Samesite Cookie
+2. 提交时要求附加本域才能获取的信息
+   1. CSRF Token  
+   2. 双重Cookie验证
 
-- 涉及到数据修改操作严格使用 post 请求而不是 get 请求
-- HTTP 协议检测HTTP referer（Origin Header 、Referer Header） 字段同域  （检测是否跨域）（在IE6存在漏洞）
-- 请求地址添加 token ，使黑客无法伪造用户请求（token即防伪码，不在cookie中。随机产生，一般放在session中）
-- HTTP 头自定义属性验证（类似上一条，如：**把token放在HTTP头自定义属性中，通过 XMLHttpRequest 给所有该类请求加上 csrftoken 这个 HTTP 头属性。并把 token 值放入其中。（这样更方便，也不会被记录在地址栏，或者token通过referer泄露**））
-- 显示验证方式：添加验证码、密码等
+#### 阻止不明外域的访问
+1. 涉及到数据修改操作严格使用 post 请求而不是 get 请求
+2. HTTP 协议检测HTTP referer（Origin Header 、Referer Header） 字段同域  （检测是否跨域）（在IE6、7存在漏洞,302请求、HTTPS跳转HTTP、flash不适用）
+#### 提交时要求附加本域才能获取的信息
+##### token
+1. 请求地址添加 token ，使黑客无法伪造用户请求（token即防伪码，不在cookie中。随机产生，一般放在session中）
+   1. 给所有a和form标签添加token
+   2. GET、POST请求添加token参数，form请求在value里面添加token参数
+   3. HTTP 头自定义属性验证（类似上一条，如：**把token放在HTTP头自定义属性中，通过 XMLHttpRequest 给所有该类请求加上 csrftoken 这个 HTTP 头属性。并把 token 值放入其中。（这样更方便，也不会被记录在地址栏，或者token通过referer泄露**））
+   4. 显示验证方式：添加验证码、密码等
+2. 服务端验证
+   1. 使用session存储Token
+      1. 但是在分布式的时候，不同后端机器session的token不能同步，所以可以使用redis进行统一存储。
+   2. Encrypted Token Pattern： 使用计算的形式验证token是否合法
+##### 不使用token，使用双重Cookie验证
+1. 在用户访问网站页面时，向请求域名注入一个Cookie，内容为随机字符串（例如csrfcookie=v8g9e4ksfhw）。
+2. 在前端向后端发起请求时，取出Cookie，并添加到URL的参数中（接上例POST https://www.a.com/comment?csrfcookie=v8g9e4ksfhw）。
+3. 后端接口验证Cookie中的字段与URL参数中的字段是否一致，不一致则拒绝。
+- 但是，在大型网站上的安全性还是没有CSRF Token高:
+  1. 由于任何跨域都会导致前端无法获取Cookie中的字段（包括子域名之间），于是发生了如下情况：
+  2. 如果用户访问的网站为www.a.com，而后端的api域名为api.a.com。那么在www.a.com下，前端拿不到api.a.com的Cookie，也就无法完成双重Cookie认证。
+  3. 于是这个认证Cookie必须被种在a.com下，这样每个子域都可以访问。
+  4. 任何一个子域都可以修改a.com下的Cookie。
+  5. 某个子域名存在漏洞被XSS攻击（例如upload.a.com）。虽然这个子域下并没有什么值得窃取的信息。但攻击者修改了a.com下的Cookie。
+  6. 攻击者可以直接使用自己配置的Cookie，对XSS中招的用户再向www.a.com下，发起CSRF攻击。
 
+- 用双重Cookie防御CSRF的优点：
+  1. 无需使用Session，适用面更广，易于实施。
+  2. Token储存于客户端中，不会给服务器带来压力。
+  3. 相对于Token，实施成本更低，可以在前后端统一拦截校验，而不需要一个个接口和页面添加。
+- 缺点：
+  1. Cookie中增加了额外的字段。
+  2. 如果有其他漏洞（例如XSS），攻击者可以注入Cookie，那么该防御方式失效。
+  3. 难以做到子域名的隔离。
+  4. 为了确保Cookie传输安全，采用这种防御方式的最好确保用整站HTTPS的方式，如果还没切HTTPS的使用这种方式也会有风险。
+   
+##### Samesite Cookie属性
+> 它用来标明这个 Cookie是个“同站 Cookie”，同站Cookie只能作为第一方Cookie，不能作为第三方Cookie，Samesite 有两个属性值，分别是 Strict 和 Lax
 
+我们应该如何使用SamesiteCookie
+如果SamesiteCookie被设置为Strict，浏览器在任何跨域请求中都不会携带Cookie，新标签重新打开也不携带，所以说CSRF攻击基本没有机会。
 
+但是跳转子域名或者是新标签重新打开刚登陆的网站，之前的Cookie都不会存在。尤其是有登录的网站，那么我们新打开一个标签进入，或者跳转到子域名的网站，都需要重新登录。对于用户来讲，可能体验不会很好。
+
+如果SamesiteCookie被设置为Lax，那么其他网站通过页面跳转过来的时候可以使用Cookie，可以保障外域连接打开页面时用户的登录状态。但相应的，其安全性也比较低。
+
+另外一个问题是Samesite的兼容性不是很好，现阶段除了从新版Chrome和Firefox支持以外，Safari以及iOS Safari都还不支持，现阶段看来暂时还不能普及。
+
+而且，SamesiteCookie目前有一个致命的缺陷：不支持子域。例如，种在topic.a.com下的Cookie，并不能使用a.com下种植的SamesiteCookie。这就导致了当我们网站有多个子域名时，不能使用SamesiteCookie在主域名存储用户登录信息。每个子域名都需要用户重新登录一次。
+
+总之，SamesiteCookie是一个可能替代同源验证的方案，但目前还并不成熟，其应用场景有待观望。
 
 
 ## 四、XSS（跨站脚本攻击）
