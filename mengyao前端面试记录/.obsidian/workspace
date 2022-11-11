@@ -1,0 +1,114 @@
+{
+  "main": {
+    "id": "f436f84e2ac53f35",
+    "type": "split",
+    "children": [
+      {
+        "id": "4c23b787eb5f2659",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "学习/GrapghQL.md",
+            "mode": "source",
+            "source": false
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "009f7d2e8a6b28d3",
+    "type": "split",
+    "children": [
+      {
+        "id": "b7ac762aed5c0f31",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8540067a33307c23",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "b6e1fa072b1216ba",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "可靠性",
+                "matchingCase": true,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 236.5
+  },
+  "right": {
+    "id": "a5aba39d432248aa",
+    "type": "split",
+    "children": [
+      {
+        "id": "7263bde0cbfc4ccf",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "17b18340125d8491",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "学习/GrapghQL.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "219b5771dc54fe28",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "学习/GrapghQL.md"
+              }
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 197.5,
+    "collapsed": true
+  },
+  "active": "4c23b787eb5f2659",
+  "lastOpenFiles": [
+    "学习/nodejs.md",
+    "学习/GrapghQL.md",
+    "面试总结tips/VUE.md",
+    "面经/面试回顾.md",
+    "小程序.md",
+    "面试总结tips/手写.md",
+    "面经/快手.md",
+    "面经/字节.md",
+    "面经/华泰.md",
+    "面经/红布林.md"
+  ]
+}
