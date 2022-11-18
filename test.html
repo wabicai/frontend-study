@@ -1,51 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+	<body class="HolyGrail">
+		<header>...</header>
+		<div class="HolyGrail-body">
+			<nav class="HolyGrail-nav">...</nav>
+			<main class="HolyGrail-content">...</main>
+			<aside class="HolyGrail-ads">...</aside>
+		</div>
+		<footer>...</footer>
+	</body>
+	<script>
+		function objectFactory(fn, ...args) {
+			let newObject = null;
+			let result = null;
+			// 判断参数是否是一个函数
+			if (typeof fn !== "function") {
+				console.error("type error");
+				return;
+			}
+			// 新建一个空对象，对象的原型为构造函数的 prototype 对象
+			newObject = Object.create(fn.prototype);
+			// 等价于 newObject[__proto__] = fn.prototype;
 
-<body class="HolyGrail">
-    <header>...</header>
-    <div class="HolyGrail-body">
-        <nav class="HolyGrail-nav">...</nav>
-        <main class="HolyGrail-content">...</main>
-        <aside class="HolyGrail-ads">...</aside>
-    </div>
-    <footer>...</footer>
-</body>
-<script>
+			// 将 this 指向新建对象，并执行函数
+			result = fn.call(newObject, ...args);
+			// 判断返回对象
+			let flag =
+				result && (typeof result === "object" || typeof result === "function");
+			// 判断返回结果
+			return flag ? result : newObject;
+		}
+	</script>
+	<style>
+		.HolyGrail {
+			display: flex;
+			min-height: 100vh;
+			flex-direction: column;
+		}
 
-</script>
-<style>
-    .HolyGrail {
-        display: flex;
-        min-height: 100vh;
-        flex-direction: column;
-    }
+		header,
+		footer {
+			flex: 1;
+		}
 
-    header,
-    footer {
-        flex: 1;
-    }
+		.HolyGrail-body {
+			display: flex;
+			flex: 1;
+		}
 
-    .HolyGrail-body {
-        display: flex;
-        flex: 1;
-    }
+		.HolyGrail-content {
+			flex: 1;
+		}
 
-    .HolyGrail-content {
-        flex: 1;
-    }
-
-    .HolyGrail-nav,
-    .HolyGrail-ads {
-        /* 两个边栏的宽度设为12em */
-        flex: 0 0 12em;
-    }
-</style>
-
+		.HolyGrail-nav,
+		.HolyGrail-ads {
+			/* 两个边栏的宽度设为12em */
+			flex: 0 0 12em;
+		}
+	</style>
 </html>
