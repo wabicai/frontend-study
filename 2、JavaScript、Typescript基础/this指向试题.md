@@ -104,6 +104,7 @@ console.log(window.number);  // 40
 // 执行obj.db1();时，this指向obj对象，执行匿名函数，所以obj.numer * 5 = 15。
 ```
 
+7. 
 ```js
 var length = 10;
 function fn() {
@@ -120,8 +121,69 @@ var obj = {
  
 obj.method(fn, 1);
 // 第一次执行fn()，this指向window对象，输出10。
-// 第二次执行arguments0，相当于arguments调用方法，this指向arguments，而这里传了两个参数，故输出arguments长度为2。
+// 第二次执行arguments0，相当于arguments调用方法，this指向arguments，而这里传了两个参数，故输出arguments长度为2。 如果是其他的参数，如test，那么arguments[0]() 得到 undefined
 ```
+
+8. 
+```js
+var a = 1;
+function printA(){
+  console.log(this.a);
+}
+var obj={
+  a:2,
+  foo:printA,
+  bar:function(){
+    printA();
+  }
+}
+
+obj.foo(); // 2
+obj.bar(); // 1
+var foo = obj.foo;
+foo(); // 1
+```
+
+
+9. 
+```js
+function a(xx){
+  this.x = xx;
+  return this
+};
+var x = a(5);
+var y = a(6);
+
+console.log(x.x)  // undefined
+console.log(y.x)  // 6
+```
+10. 
+```js
+function foo(something){
+    this.a = something
+}
+
+var obj1 = {
+    foo: foo
+}
+
+var obj2 = {}
+
+obj1.foo(2); 
+console.log(obj1.a); // 2
+
+obj1.foo.call(obj2, 3);
+console.log(obj2.a); // 3
+
+var bar = new obj1.foo(4)
+console.log(obj1.a); // 2
+console.log(bar.a); // 4
+// 首先执行obj1.foo(2); 会在obj中添加a属性，其值为2。之后执行obj1.a，a是右obj1调用的，所以this指向obj，打印出2；
+// 执行 obj1.foo.call(obj2, 3) 时，会将foo的this指向obj2，后面就和上面一样了，所以会打印出3；
+// obj1.a会打印出2；
+// 最后就是考察this绑定的优先级了，new 绑定是比隐式绑定优先级高，所以会输出4。
+```
+
 
 ```js
 var name = 'Nicolas';
