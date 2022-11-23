@@ -28,17 +28,17 @@ link 是 XHTML 标签，无兼容问题；@import 是在 CSS2.1 提出的，低�
 
 link 支持使用 Javascript 控制 DOM 去改变样式；而 @import 不支持
 
-## 为什么link用href获取资源 script和img用src
+# 为什么link用href获取资源 script和img用src
 > src用于替换当前元素，href用于在当前文档和引用资源之间确立联系。
 
-### src
+## src
 
 src是source的缩写，指向外部资源的位置，指向的内容将会嵌入到文档中当前标签所在位置；在请求src资源时会将其指向的资源下载并应用到文档内，例如js脚本，img图片和frame等元素
 
 <script src ="js.js"></script> 
 ​ 当浏览器解析到该元素时，会暂停其他资源的下载和处理，直到将该资源加载、编译、执行完毕，图片和框架 等元素也如此，类似于将所指向资源嵌入当前标签内。这也是为什么将js脚本放在底部而不是头部
 
-### href
+## href
 
 href是Hypertext Reference的缩写，指向网络资源所在位置，建立和当前元素（锚点）或当前文档（链接）之间的链接
 
