@@ -1,4 +1,5 @@
 # link 和 @import
+相同点：两者都可以引用外部CSS的方式
 - link 的使用
 ```js
 <link href="index.css" rel="stylesheet">
@@ -57,7 +58,23 @@ href是Hypertext Reference的缩写，指向网络资源所在位置，建立和
    1. Render Tree是依赖于DOM Tree和CSSOM Tree的，所以他必须等待到CSSOM Tree构建完成，也就是CSS资源加载完成(或者CSS资源加载失败)后，才能开始渲染。因此，CSS加载是会阻塞Dom的渲染的。
 3. css加载会阻塞后面js语句的执行
    1. 由于js可能会操作之前的Dom节点和css样式，因此浏览器会维持html中css和js的顺序。因此，样式表会先加载执行完毕再处理后面的js。所以css会阻塞后面js的执行。
+即：
+正常：
+1. CSS、DOM并行加载、解析
+   1. 等DOM、CSS都解析完毕，再渲染
+2. 遇到JS立马执行，同时停止渲染
+
+异常情况：
+1. CSS加载、解析到一半，遇到script标签
+   1. script立马执行，阻塞Dom解析
+
+
+## 注意点：
+1. 解析html生成DOM tree->根据DOM tree和样式表生成render tree->渲染render tree展示：
+   1. 浏览器是边解析html生成局部的DOM tree，浏览器就生成部分render tree然后展示出来
+2. 两种外部资源会阻塞脚本执行，从而阻塞渲染。（外部CSS阻塞渲染，不阻塞解析。）
+   1. 外部js、外部css
+   2. 其他外部资源是不阻塞渲染的，比如图片，我们能看到很多时候页面大体的框架都呈现出来了，就是图片的位置没有显示出来的情况，等到图片下载下来以后再重新渲染。
 
 ## script 加载 js
-
-## 
+- web的模式是同步的，开发者希望解析到一个script标签时立即解析执行脚本，并阻塞文档的解析直到脚本执行完；如果脚本是外引的，当引用了JS的时候，浏览器发送一个js request就会一直等待该request的返回，这个过程也是同步的，会阻塞文档的解析直到资源被请求到
