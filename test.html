@@ -18,23 +18,23 @@
 	<footer>...</footer>
 </body>
 <script>
-	function add(a) {
-		let sumNum = 0;
-		sumNum += a;
-		let sum = function (b) {
-			if (b !== null) {
-				sumNum += b
-			}
-			return sum
-		}
-		sum.toString = function () {
-			return sumNum
-		}
-		return sum
-
-	}
-	let test = add(1)
-	console.log(test);
+	let p = new Promise((resolve) => {
+		setTimeout(() => {
+			resolve(2);
+		}, 0)
+		resolve(1);
+		resolve(3);
+	}).then((res) => {
+		console.log(res);
+		setTimeout(() => {
+			console.log('setTimeout');
+		}, 0)
+		return 333
+	}).finally((res) => {
+		console.log('finally', p);
+	}).then((res) => {
+		console.log('then2', res);
+	})
 </script>
 <style>
 	.HolyGrail {

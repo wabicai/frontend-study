@@ -1,4 +1,4 @@
-## watch&&computed
+## watch和computed
 
 ### computed
 
