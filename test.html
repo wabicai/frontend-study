@@ -9,58 +9,44 @@
 </head>
 
 <body class="HolyGrail">
-	<header>...</header>
-	<div class="HolyGrail-body">
-		<nav class="HolyGrail-nav">...</nav>
-		<main class="HolyGrail-content">...</main>
-		<aside class="HolyGrail-ads">...</aside>
+	<div class="father">
+		<div class="left">
+			<ul>
+				<li>
+					1
+				</li>
+			</ul>
+		</div>
+		<div class="right">
+			<ul>
+				<li>
+					1
+				</li>
+				<li>
+					2
+				</li>
+			</ul>
+		</div>
 	</div>
-	<footer>...</footer>
 </body>
 <script>
-	let p = new Promise((resolve) => {
-		setTimeout(() => {
-			resolve(2);
-		}, 0)
-		resolve(1);
-		resolve(3);
-	}).then((res) => {
-		console.log(res);
-		setTimeout(() => {
-			console.log('setTimeout');
-		}, 0)
-		return 333
-	}).finally((res) => {
-		console.log('finally', p);
-	}).then((res) => {
-		console.log('then2', res);
-	})
 </script>
 <style>
-	.HolyGrail {
-		display: flex;
-		min-height: 100vh;
-		flex-direction: column;
+	.father {
+		display: grid;
+		grid-template-columns: 200px 200px;
+		background-color: black;
+		padding: 20px;
 	}
 
-	header,
-	footer {
-		flex: 1;
+	.left {
+		background-color: blue;
+		width: 200px;
 	}
 
-	.HolyGrail-body {
-		display: flex;
-		flex: 1;
-	}
-
-	.HolyGrail-content {
-		flex: 1;
-	}
-
-	.HolyGrail-nav,
-	.HolyGrail-ads {
-		/* 两个边栏的宽度设为12em */
-		flex: 0 0 12em;
+	.right {
+		width: 200px;
+		background-color: red;
 	}
 </style>
 

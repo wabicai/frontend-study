@@ -153,5 +153,3 @@ If-None-Match：再次请求服务器时，浏览器的请求报文头部会包�
    F5就是告诉浏览器，别偷懒，好歹去服务器看看这个文件是否有过期了。于是浏览器就胆胆襟襟的发送一个请求带上If-Modify-since。
 3. Ctrl+F5
    告诉浏览器，你先把你缓存中的这个文件给我删了，然后再去服务器请求个完整的资源文件下来。于是客户端就完成了强行更新的操作.
-
-![image-20210327005224210](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20210327005224210.png)
