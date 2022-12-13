@@ -39,6 +39,13 @@
 #### 如何防御
 1. 准备两个域名，随时切换
 2. 预埋ip地址，拿不到正确回包的时候直接发起ip请求
+3. DNS over HTTPS
+   1. 在 TLS 协议之上传输 DNS 内容。
+4. DNS over HTTP
+   1. 用 HTTP 协议来传输 DNS。
+5. DNS over HTTPS
+   1. 用 HTTPS 协议来传输 DNS
+> 一般使用 http-dns 绕过运营商解析域名，达到防止 DNS 劫持的目的.
 
 ### 不能解决的问题
 1. 客户端木马、问题
