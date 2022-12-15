@@ -137,7 +137,7 @@ FMP（First Meaning Paint）：首次有效绘制，标记主角元素渲染完�
 
 ### Hydration
 
-1. 服务端通过 renderToString 直出 HTML。
+1. 服务端通过 renderToString 直出 HTML。 
 
 2. 浏览器下载所有相关的 JS，包括框架运行时代码、组件代码等。
 
