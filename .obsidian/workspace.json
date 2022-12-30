@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "5、框架相关/Vue/13、Vue2 vs Vue3.md",
+                "file": "5、框架相关/Vue/3、Vue组件通信的八种方式.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "5、框架相关/Vue/13、Vue2 vs Vue3.md",
+                "file": "5、框架相关/Vue/3、Vue组件通信的八种方式.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "5、框架相关/Vue/13、Vue2 vs Vue3.md",
+                "file": "5、框架相关/Vue/3、Vue组件通信的八种方式.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "5、框架相关/Vue/13、Vue2 vs Vue3.md"
+                "file": "5、框架相关/Vue/3、Vue组件通信的八种方式.md"
               }
             }
           }
@@ -138,14 +138,15 @@
   },
   "active": "de85ea3376b64992",
   "lastOpenFiles": [
+    "5、框架相关/Vue/6、组件插槽.md",
+    "5、框架相关/Vue/4、组件状态管理VueX.md",
+    "5、框架相关/Vue/3、Vue组件通信的八种方式.md",
+    "5、框架相关/Vue/13、Vue2 vs Vue3.md",
     "5、框架相关/Vue/vue中api的原理.md",
     "1、HTML、CSS基础/15、Flex和Gird进阶.md",
     "1、HTML、CSS基础/14、Canvas和SVG的异同.md",
     "2、JavaScript、Typescript基础/24、Class in JS.md",
     "3、前端必撕代码/14、手写防抖节流.md",
-    "3、前端必撕代码/13、深拷贝，浅拷贝.md",
-    "3、前端必撕代码/7、手写Ajax请求.md",
-    "3、前端必撕代码/5、JS继承.md",
-    "3、前端必撕代码/2、实现一个promise超时自动reject.md"
+    "3、前端必撕代码/13、深拷贝，浅拷贝.md"
   ]
 }
