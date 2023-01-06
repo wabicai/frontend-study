@@ -2,34 +2,26 @@
 [带你彻底弄懂Event Loop](https://segmentfault.com/a/1190000016278115)
 
 [什么是 Event Loop？](http://www.ruanyifeng.com/blog/2013/10/event_loop.html)
-# Event Loop是什么
->"Event Loop是一个程序结构，用于等待和发送消息和事件。（a programming construct that waits for and dispatches events or messages in a program.）"
->简单说，就是在程序中设置两个线程：一个负责程序本身的运行，称为"主线程"；
->另一个负责主线程与其他进程（主要是各种I/O操作）的通信，被称为"Event Loop线程"（可以译为"消息线程"）
->![在这里插入图片描述](https://img-blog.csdnimg.cn/20210305113641120.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FidWFuZGVu,size_16,color_FFFFFF,t_70)
->上图主线程的绿色部分，还是表示运行时间，而橙色部分表示空闲时间。每当遇到I/O的时候，主线程就让Event Loop线程去通知相应的I/O程序，然后接着往后运行，所以不存在红色的等待时间。等到I/O程序完成操作，Event Loop线程再把结果返回主线程。主线程就调用事先设定的回调函数，完成整个任务。
->这里建议直接看： [什么是 Event Loop？](http://www.ruanyifeng.com/blog/2013/10/event_loop.html)
-
-**event loop是一个执行模型，在不同的地方有不同的实现。浏览器和NodeJS基于不同的技术实现了各自的Event Loop。**
-
- - 浏览器的Event Loop是在html5的规范中明确定义。
- - NodeJS的Event Loop是基于libuv实现的。可以参考Node的官方文档以及libuv的官方文档。 
- - libuv已经对Event Loop做出了实现，而HTML5规范中只是定义了浏览器中Event Loop的模型，具体的实现留给了浏览器厂商。
-
 
 # 宏队列和微队列
+
+## 为什么消息队列要有宏队列和微队列之分
+
+1. 宏任务可以满足我们大部分的日常需求，但是宏任务的时间粒度比较大，执行的时间间隔是不能精确控制的，
+
 ## **宏队列，macrotask，也叫tasks。** 
+
 一些异步任务的回调会依次进入macro task queue，等待后续被调用，这些异步任务包括：
 
- 1. setTimeout 
- 2. setInterval 
- 3. setImmediate (Node独有)
-  4. requestAnimationFrame  (浏览器独有)
-       1. requestAnimationFrame在[MDN的定义](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame)为，下次页面重绘前所执行的操作，而重绘也是作为宏任务的一个步骤来存在的，且该步骤晚于微任务的执行。严格来说，这个api不属于宏任务也不属于微任务，他的触发时间位于宏任务和微任务之间。
-  5. I/O 
-  6. UI rendering (浏览器独有)
+1. setTimeout 
+2. setInterval 
+3. setImmediate (Node独有)
+4. requestAnimationFrame  (浏览器独有)
+5. I/O 
+6. UI rendering (浏览器独有)
 
 ## **微队列，microtask，也叫jobs。** 
+
 另一些异步任务的回调会依次进入micro task queue，等待后续被调用，这些异步任务包括：
 
  7. process.nextTick (Node独有)
@@ -39,8 +31,11 @@
 **（注：这里只针对浏览器和NodeJS）**
 
 # 浏览器的Event Loop
+
 我们先来看一张图，再看完这篇文章后，请返回来再仔细看一下这张图，相信你会有更深的理解。
+
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210305105849896.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FidWFuZGVu,size_16,color_FFFFFF,t_70)
+
 这张图将浏览器的Event Loop完整的描述了出来，我来讲执行一个JavaScript代码的具体流程：
 
  1. 执行全局Script同步代码，这些同步代码有一些是同步语句，有一些是异步语句（比如setTimeout等）；
@@ -59,28 +54,29 @@
  1. 宏队列macrotask一次只从队列中取一个任务执行，执行完后就去执行微任务队列中的任务；
  2. 微任务队列中所有的任务都会被依次取出来执行，直到microtask queue为空； 
  3. 图中没有画UI rendering的节点，因为这个是由浏览器自行判断决定的，但是只要执行UI rendering，它的节点是在执行完所有的microtask之后，下一个macrotask之前，紧跟着执行UI render。
+    1. 所以导致一个问题：微任务，如果添加速度大于执行速度，并且一直添加，则微队列一直不为空，它就会阻塞UI线程 
 
-- 好了，概念性的东西就这么多，来看几个示例代码，测试一下你是否掌握了:
+* 好了，概念性的东西就这么多，来看几个示例代码，测试一下你是否掌握了:
 
 ```javascript
 console.log(1);
 
 setTimeout(() => {
-  console.log(2);
-  Promise.resolve().then(() => {
-    console.log(3)
-  });
+    console.log(2);
+    Promise.resolve().then(() => {
+        console.log(3)
+    });
 });
 
 new Promise((resolve, reject) => {
-  console.log(4)
-  resolve(5)
+    console.log(4)
+    resolve(5)
 }).then((data) => {
-  console.log(data);
+    console.log(data);
 })
 
 setTimeout(() => {
-  console.log(6);
+    console.log(6);
 })
 
 console.log(7);
@@ -104,79 +100,88 @@ console.log(7);
 ```javascript
 console.log(1)
 ```
+
 Stack Queue: [console]
 
 Macrotask Queue: []
 
 Microtask Queue: []
->打印结果：
->1
 
+> 打印结果：
+> 1
 
 **Step 2**
 
 ```javascript
 setTimeout(() => {
-  // 这个回调函数叫做callback1，setTimeout属于macrotask，所以放到macrotask queue中
-  console.log(2);
-  Promise.resolve().then(() => {
-    console.log(3)
-  });
+    // 这个回调函数叫做callback1，setTimeout属于macrotask，所以放到macrotask queue中
+    console.log(2);
+    Promise.resolve().then(() => {
+        console.log(3)
+    });
 });
 ```
+
 Stack Queue: [setTimeout]
 
 Macrotask Queue: [callback1]
 
 Microtask Queue: []
->打印结果：
->1
+
+> 打印结果：
+> 1
 
 **Step 3**
 
 ```javascript
 new Promise((resolve, reject) => {
-  // 注意，这里是同步执行的
-  console.log(4)
-  resolve(5)
+    // 注意，这里是同步执行的
+    console.log(4)
+    resolve(5)
 }).then((data) => {
-  // 这个回调函数叫做callback2，promise属于microtask，所以放到microtask queue中
-  console.log(data);
+    // 这个回调函数叫做callback2，promise属于microtask，所以放到microtask queue中
+    console.log(data);
 })
 ```
+
 Stack Queue: [promise]
 
 Macrotask Queue: [callback1]  //宏队列
 
 Microtask Queue: [callback2]  //微队列
->打印结果：
->1
->4
+
+> 打印结果：
+> 1
+> 4
 
 **Step 4**
 
 ```javascript
 setTimeout(() => {
-  // 这个回调函数叫做callback3，setTimeout属于macrotask，所以放到macrotask queue中
-  console.log(6);
+    // 这个回调函数叫做callback3，setTimeout属于macrotask，所以放到macrotask queue中
+    console.log(6);
 })
 ```
+
 Stack Queue: [setTimeout]
 
 Macrotask Queue: [callback1, callback3]
 
 Microtask Queue: [callback2]
->打印结果：
->1
->4
+
+> 打印结果：
+> 1
+> 4
 
 **Step 5**
 console.log(7)
+
 > 打印结果：
 > 1
 > 4
 > 7
-- 好啦，全局Script代码执行完了，进入下一个步骤，从microtask queue中依次取出任务执行，直到microtask queue队列为空。
+
+* 好啦，全局Script代码执行完了，进入下一个步骤，从microtask queue中依次取出任务执行，直到microtask queue队列为空。
 
 Stack Queue: [console]
 
@@ -200,49 +205,51 @@ Microtask Queue: []
 7
 5
 ```
-- 这里microtask queue中只有一个任务，执行完后开始从宏任务队列macrotask queue中取位于队首的任务执行
 
+* 这里microtask queue中只有一个任务，执行完后开始从宏任务队列macrotask queue中取位于队首的任务执行
 
 **Step 7**
 
 ```javascript
 console.log(2)
 ```
+
 Stack Queue: [callback1]
 
 Macrotask Queue: [callback3]
 
 Microtask Queue: []
-- 但是，执行callback1的时候又遇到了另一个Promise，Promise异步执行完后在microtask queue中又注册了一个callback4回调函数
+* 但是，执行callback1的时候又遇到了另一个Promise，Promise异步执行完后在microtask queue中又注册了一个callback4回调函数
 **Step 8**
 
 ```javascript
 Promise.resolve().then(() => {
-  // 这个回调函数叫做callback4，promise属于microtask，所以放到microtask queue中
-  console.log(3)
+    // 这个回调函数叫做callback4，promise属于microtask，所以放到microtask queue中
+    console.log(3)
 });
 ```
+
 Stack Queue: [promise]
 
 Macrotask v: [callback3]
 
 Microtask Queue: [callback4]
-- 取出一个宏任务macrotask执行完毕，然后再去微任务队列microtask queue中依次取出执行
+* 取出一个宏任务macrotask执行完毕，然后再去微任务队列microtask queue中依次取出执行
 
 **Step 9**
 
 ```javascript
 console.log(3)
 ```
+
 Stack Queue: [callback4]
 
 Macrotask Queue: [callback3]
 
 Microtask Queue: []
-- 微任务队列全部执行完，再去宏任务队列中取第一个任务执行
+* 微任务队列全部执行完，再去宏任务队列中取第一个任务执行
 
-- 以上，全部执行完后，Stack Queue为空，Macrotask Queue为空，Micro Queue为空 
-
+* 以上，全部执行完后，Stack Queue为空，Macrotask Queue为空，Micro Queue为空 
 
 再来一个例子：
 
@@ -250,31 +257,31 @@ Microtask Queue: []
 console.log(1);
 
 setTimeout(() => {
-  console.log(2);
-  Promise.resolve().then(() => {
-    console.log(3)
-  });
+    console.log(2);
+    Promise.resolve().then(() => {
+        console.log(3)
+    });
 });
 
 new Promise((resolve, reject) => {
-  console.log(4)
-  resolve(5)
+    console.log(4)
+    resolve(5)
 }).then((data) => {
-  console.log(data);
-  
-  Promise.resolve().then(() => {
-    console.log(6)
-  }).then(() => {
-    console.log(7)
-    
-    setTimeout(() => {
-      console.log(8)
-    }, 0);
-  });
+    console.log(data);
+
+    Promise.resolve().then(() => {
+        console.log(6)
+    }).then(() => {
+        console.log(7)
+
+        setTimeout(() => {
+            console.log(8)
+        }, 0);
+    });
 })
 
 setTimeout(() => {
-  console.log(9);
+    console.log(9);
 })
 
 console.log(10);
@@ -302,73 +309,77 @@ console.log(10);
 ```js
 //2 3 5 6 4 7 8 1
 setTimeout(() => {
-        console.log(1);
-    }, 0);
-    console.log(2);
-    async1()
+    console.log(1);
+}, 0);
+console.log(2);
+async1()
 
-    async function async1() {
-        console.log(3);
-        await async2();
-        console.log(4);
-        //对await进行改写
-        // new Promise((resolve)=>{
-        //     async2()
-        //     resolve()
-        // }).then(()=>{
-        //     console.log(4);
-        // })
-    }
-    requestAnimationFrame(() => {
-        console.log(8);
-    })
-    async function async2() {
-        console.log(5);
-    }
-    new Promise((resolve, reject) => {
-        console.log(6);
-        resolve();
-    }).then(() => {
-        console.log(7);
-    })
+async function async1() {
+    console.log(3);
+    await async2();
+    console.log(4);
+    //对await进行改写
+    // new Promise((resolve)=>{
+    //     async2()
+    //     resolve()
+    // }).then(()=>{
+    //     console.log(4);
+    // })
+}
+requestAnimationFrame(() => {
+    console.log(8);
+})
+async function async2() {
+    console.log(5);
+}
+new Promise((resolve, reject) => {
+    console.log(6);
+    resolve();
+}).then(() => {
+    console.log(7);
+})
 ```
 
-2. ```js
-   async function async1() {
-               console.log('async1 start');
-               await async2();
-               console.log('async1 end');
-           }
-           
-           async function async2() {
-               console.log('async2 start');
-               return new Promise((resolve, reject) => {
-                   resolve();
-                   console.log('async2 promise');
-               })
-           }
-           
-           console.log('script start');
-           
-           setTimeout(function() {
-               console.log('setTimeout');
-           }, 0);
-           
-           async1();
-           
-           new Promise(function(resolve) {
-               console.log('promise1');
-               resolve();
-           }).then(function() {
-               console.log('promise2');
-           }).then(function() {
-               console.log('promise3');
-           });
-           
-           console.log('script end');
-   ```
+2. 
 
-3. ```js
+```js
+   async function async1() {
+       console.log('async1 start');
+       await async2();
+       console.log('async1 end');
+   }
+
+   async function async2() {
+       console.log('async2 start');
+       return new Promise((resolve, reject) => {
+           resolve();
+           console.log('async2 promise');
+       })
+   }
+
+   console.log('script start');
+
+   setTimeout(function() {
+       console.log('setTimeout');
+   }, 0);
+
+   async1();
+
+   new Promise(function(resolve) {
+       console.log('promise1');
+       resolve();
+   }).then(function() {
+       console.log('promise2');
+   }).then(function() {
+       console.log('promise3');
+   });
+
+   console.log('script end');
+```
+
+3. 
+
+```js
    new Promise((resolve, reject) => {
        console.log("async1 start");
        console.log("async2");
@@ -376,18 +387,17 @@ setTimeout(() => {
    }).then(() => {
        console.log("async1 end");
    });
-   
-   new Promise(function (resolve) {
+
+   new Promise(function(resolve) {
        console.log("promise1");
        resolve();
-   }).then(function () {
+   }).then(function() {
        console.log("promise2");
-   }).then(function () {
+   }).then(function() {
        console.log("promise3");
-   }).then(function () {
+   }).then(function() {
        console.log("promise4");
    });
-   ```
+```
 
    
-
