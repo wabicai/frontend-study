@@ -4,9 +4,7 @@
 [async 函数的含义和用法](http://www.ruanyifeng.com/blog/2015/05/async.html)
 @[TOC]
 
-# 1. async 和 await 在干什么
-
-## 1.1. async 起什么作用
+## async 起什么作用
 
 这个问题的关键在于，async 函数是怎么处理它的返回值的！
 
