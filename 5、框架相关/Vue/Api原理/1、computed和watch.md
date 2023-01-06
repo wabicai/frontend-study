@@ -123,6 +123,11 @@ function createWatcher(
 
 ### $watch
 
+属性：
+1. immediate
+2. deep
+3. handler
+
 ```js
 Vue.prototype.$watch = function(expOrFn, cb, options) {
     const vm: Component = this
