@@ -6,28 +6,7 @@
 
 @[TOC]
 
-# XMLHttpRequest
-
-## 什么是status？
-
-HTTP状态码(status)由三个十进制数字组成，第一个十进制数字定义了状态码的类型，后两个数字没有分类的作用。HTTP状态码共分为5种类型：
-
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20210309105229513.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FidWFuZGVu,size_16,color_FFFFFF,t_70)
-
-常见状态码：
-
-* 200 表示从客户端发来的请求在服务器端被正常处理了。
-* 204 表示请求处理成功，但没有资源返回。
-* 301 表示永久性重定向。该状态码表示请求的资源已被分配了新的URI，以后应使用资源现在所指的URI。
-* 302 表示临时性重定向。
-* 304 表示客户端发送附带条件的请求时（指采用GET方法的请求报文中包含if-matched, if-modified-since, if-none-match, if-range, if-unmodified-since任一个首部）服务器端允许请求访问资源，但因发生请求未满足条件的情况后，直接返回304Modified（服务器端资源未改变，可直接使用客户端未过期的缓存）
-* 400 表示请求报文中存在语法错误。当错误发生时，需修改请求的内容后再次发送请求。
-* 401 表示未授权（Unauthorized)，当前请求需要用户验证
-* 403 表示对请求资源的访问被服务器拒绝了
-* 404 表示服务器上无法找到请求的资源。除此之外，也可以在服务器端拒绝请求且不想- 说明理由时使用。
-* 500 表示服务器端在执行请求时发生了错误。也有可能是Web应用存在的bug或某些临时的故障。
-* 503 表示服务器暂时处于超负载或正在进行停机维护，现在无法处理请求。
-# 四、Ajax封装
+# Ajax封装
 
 ## ES6
 
@@ -192,13 +171,13 @@ fetch不是ajax的进一步封装，而是使用原生js，没有使用XHR
 * 支持防御 `XSS` 和 `CSRF`
 * 既提供了并发的封装，也没有 `fetch` 的各种问题，体积也比较小。
 
-## 参考链接
-
-* [ajax、axios、fetch之间优缺点重点对比](https://zhuanlan.zhihu.com/p/58062212) 
-* [ajax和axios、fetch的区别](https://www.jianshu.com/p/8bc48f8fde75) 
-
 ## axios怎么取消重复请求
 
 1. 根据当前请求的请求方式、请求 URL 地址和请求参数来生成一个唯一的 key，作为cancelToken
 2. 在响应拦截器Map遍历pedingRequest是否有该请求，进行移除。AbortController接口可以中止请求（中止下载也可以）
 3. 需要注意的是已取消的请求可能已经达到服务端，针对这种情形，服务端的对应接口需要进行幂等控制
+
+## 参考链接
+
+* [ajax、axios、fetch之间优缺点重点对比](https://zhuanlan.zhihu.com/p/58062212) 
+* [ajax和axios、fetch的区别](https://www.jianshu.com/p/8bc48f8fde75) 

@@ -91,7 +91,7 @@ href是Hypertext Reference的缩写，指向网络资源所在位置，建立和
 ## script的async和defer特性
 
 `async`  特性意味着脚本是完全独立的：
-*   浏览器不会因 `async` 脚本而阻塞（与 `defer` 类似）。
+*   浏览器有可能因 `async` 脚本而阻塞。
 *   其他脚本不会等待 `async` 脚本加载完成，同样，`async` 脚本也不会等待其他脚本。
 *   `DOMContentLoaded` 和异步脚本不会彼此等待：
     -   `DOMContentLoaded` 可能会发生在异步脚本之前（如果异步脚本在页面完成后才加载完成）
