@@ -1,66 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<script>
+		let list = [];
+		window.test = async function () {
+			let requestList = [
+				new Promise((resolve, rej) => {
+					setTimeout(() => {
+						resolve(1000);
+					}, 1000);
+				}),
+				new Promise((resolve, rej) => {
+					setTimeout(() => {
+						resolve(500);
+					}, 500);
+				}),
+				new Promise((resolve, rej) => {
+					setTimeout(() => {
+						resolve(2000);
+					}, 2000);
+				}),
+			];
+			for (let item of requestList) {
+				item.then(
+					(res) => {
+						list.push(res);
+					},
+					(error) => {
+						list.push(error);
+					}
+				);
+			}
+		};
 
-<head>
-	<meta charset="UTF-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Document</title>
-</head>
-<script>
-	window.test = async function () {
-		function dd() {
-			setTimeout(() => {
-				console.log('setTimeout');
-			}, 2000);
+		console.log(test());
+		setTimeout(() => {
+			console.log(list);
+		}, 3000);
+	</script>
+
+	<body class="HolyGrail">
+		<div class="father">
+			<div class="left">
+				<ul>
+					<li>1</li>
+				</ul>
+			</div>
+			<div class="right">
+				<ul>
+					<li>1</li>
+					<li>2</li>
+				</ul>
+			</div>
+		</div>
+	</body>
+	<script></script>
+	<style>
+		.father {
+			display: grid;
+			grid-template-columns: 200px 200px;
+			background-color: black;
+			padding: 20px;
 		}
-		await dd()
-		console.log('end');
-		return function tet() { }
-	}
-	console.log(test());
-</script>
 
-<body class="HolyGrail">
-	<div class="father">
-		<div class="left">
-			<ul>
-				<li>
-					1
-				</li>
-			</ul>
-		</div>
-		<div class="right">
-			<ul>
-				<li>
-					1
-				</li>
-				<li>
-					2
-				</li>
-			</ul>
-		</div>
-	</div>
-</body>
-<script>
-</script>
-<style>
-	.father {
-		display: grid;
-		grid-template-columns: 200px 200px;
-		background-color: black;
-		padding: 20px;
-	}
+		.left {
+			background-color: blue;
+			width: 200px;
+		}
 
-	.left {
-		background-color: blue;
-		width: 200px;
-	}
-
-	.right {
-		width: 200px;
-		background-color: red;
-	}
-</style>
-
+		.right {
+			width: 200px;
+			background-color: red;
+		}
+	</style>
 </html>
