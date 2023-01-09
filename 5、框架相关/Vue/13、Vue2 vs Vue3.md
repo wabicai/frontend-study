@@ -35,8 +35,8 @@
     vue2：vue2 是把数据放入 data 中，在 vue2 中定义数据变量是 data(){}，创建的方法要在 methods:{}中。
     vue3：，vue3 就需要使用一个新的 setup()方法，此方法在组件初始化构造的时候触发。使用以下三个步骤来建立反应性数据： 1. 从 vue 引入 reactive； 2. 使用 reactive() 方法来声明数据为响应性数据； 3. 使用 setup()方法来返回我们的响应性数据，从而 template 可以获取这些响应性数据。
 
-5、生命周期钩子函数不同
-vue2：vue2 中的生命周期：
+5.  生命周期钩子函数不同
+    vue2：vue2 中的生命周期：
 
 beforeCreate 组件创建之前
 created 组件创建之后
@@ -62,6 +62,15 @@ onUpdated 组件更新之后
    vue2：vue2 中使用 slot 可以直接使用 slot；v-for 与 v-if 在 vue2 中优先级高的是 v-for 指令，而且不建议一起使用。
    vue3：vue3 中必须使用 v-slot 的形式；vue3 中 v-for 与 v-if,只会把当前 v-if 当做 v-for 中的一个判断语句，不会相互冲突；vue3 中移除 keyCode 作为 v-on 的修饰符，当然也不支持 config.keyCodes；vue3 中移除 v-on.native 修饰符；vue3 中移除过滤器 filter。
 
-8.main.js 文件不同
-vue2：vue2 中我们可以使用 pototype(原型)的形式去进行操作，引入的是构造函数。
-vue3：vue3 中需要使用结构的形式进行操作，引入的是工厂函数；vue3 中 app 组件中可以没有根标签。
+8. main.js 文件不同
+   vue2：vue2 中我们可以使用 pototype(原型)的形式去进行操作，引入的是构造函数。
+   vue3：vue3 中需要使用结构的形式进行操作，引入的是工厂函数；vue3 中 app 组件中可以没有根标签。
+
+9. Dom diff 算法不同
+
+Vue3:
+
+- 对静态数据进行了标记，在 diff 算法时直接跳过,只会被创建一次，在渲染时直接复用。
+
+10. tree-shaking
+    对不用的代码进行删除
