@@ -73,11 +73,16 @@ FMP（First Meaning Paint）：首次有效绘制，标记主角元素渲染完�
 4. 懒加载(setTimeout, requestIdleCallback 放到后面的事件循环或者空闲时间)
 5. 使用web Worker,对CPU密集型的计算进行优化
 6. 利用渲染时候的{合成层}
-   1. 合成层的位图，会交由 GPU 合成，比 CPU 处理要快；
+   1. 合成层的位图，会交由 GPU 合成，比 CPU 处理要快；（transform）
    2. 父元素使用will-change, 如果子元素使用动画的话
 7. 使用CSS元素
    1. contain: strict(特定的DOM元素和它的子元素，让它们能够独立于整个DOM树结构之外。它能够让浏览器有能力只对部分元素进行重绘、重排，而不必每次针对整个页面)
    2. content-visibility(允许我们推迟我们选择的HTML元素渲染)
+8. dom离线（脱离文档流，再恢复）
+   1. display：none
+   2. createDocumentFragment
+   3. 通过在需要操作的节点上创建副本，然后在副本上进行操作，最后进行替换（DOM.replaceChild）
+   4. 如果不脱离文档流，对文档的每一步操作都有可能导致重绘或者重排，但是使用离线dom操作可以让操作完成之后只产生一次重排。
 
 ## 静态资源优化
 
