@@ -6,43 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Document</title>
 	</head>
-	<script>
-		let list = [];
-		window.test = async function () {
-			let requestList = [
-				new Promise((resolve, rej) => {
-					setTimeout(() => {
-						resolve(1000);
-					}, 1000);
-				}),
-				new Promise((resolve, rej) => {
-					setTimeout(() => {
-						resolve(500);
-					}, 500);
-				}),
-				new Promise((resolve, rej) => {
-					setTimeout(() => {
-						resolve(2000);
-					}, 2000);
-				}),
-			];
-			for (let item of requestList) {
-				item.then(
-					(res) => {
-						list.push(res);
-					},
-					(error) => {
-						list.push(error);
-					}
-				);
-			}
-		};
-
-		console.log(test());
-		setTimeout(() => {
-			console.log(list);
-		}, 3000);
-	</script>
+	<script></script>
 
 	<body class="HolyGrail">
 		<div class="father">
