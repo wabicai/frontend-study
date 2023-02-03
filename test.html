@@ -6,7 +6,30 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Document</title>
 	</head>
-	<script></script>
+	<script>
+		function add(...initArgs) {
+			// 第一次执行时，定义一个数组专门用来存储所有的参数
+			var _args = initArgs.slice();
+			// 在内部声明一个函数，利用闭包的特性保存_args并收集所有的参数值
+			var _adder = function (...args) {
+				if (args.length > 0) {
+					if (args.length) _args.push(...args);
+					return _adder;
+				} else {
+					console.log(
+						_args.reduce((a, b) => {
+							return a + b;
+						})
+					);
+				}
+			};
+			return _adder;
+		}
+		add(1)(2)(3)(); // 6
+		add(1, 2, 3)(4)(); // 10
+		add(1)(2)(3)(4)(5)(); // 15
+		add(2, 6)(1)(); // 9
+	</script>
 
 	<body class="HolyGrail">
 		<div class="father">
