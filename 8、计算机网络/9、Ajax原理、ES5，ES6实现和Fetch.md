@@ -208,7 +208,7 @@ function requestA(){
             //do xxx
             handleError(error);
         })
-    });
+    };
 }
 ```
 
