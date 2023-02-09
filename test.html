@@ -7,28 +7,26 @@
 		<title>Document</title>
 	</head>
 	<script>
-		function add(...initArgs) {
-			// 第一次执行时，定义一个数组专门用来存储所有的参数
-			var _args = initArgs.slice();
-			// 在内部声明一个函数，利用闭包的特性保存_args并收集所有的参数值
-			var _adder = function (...args) {
-				if (args.length > 0) {
-					if (args.length) _args.push(...args);
-					return _adder;
-				} else {
-					console.log(
-						_args.reduce((a, b) => {
-							return a + b;
-						})
-					);
+		let test = { "a.b.c": 1, "a.d": 2, e: 3 };
+		let getObj = function (obj) {
+			let newObj = {};
+			let helper = function (parts, val, obj) {
+				if (parts.length === 0) return val;
+				let currKey = parts.shift();
+				if (!obj.hasOwnProperty(currKey)) {
+					obj[currKey] = {};
 				}
+				obj[currKey] = helper(parts, val, obj[currKey]);
+				return obj;
 			};
-			return _adder;
-		}
-		add(1)(2)(3)(); // 6
-		add(1, 2, 3)(4)(); // 10
-		add(1)(2)(3)(4)(5)(); // 15
-		add(2, 6)(1)(); // 9
+			for (let key in obj) {
+				const val = obj[key];
+				const parts = key.split(".");
+				helper(parts, val, newObj);
+			}
+			console.log(newObj);
+		};
+		getObj(test);
 	</script>
 
 	<body class="HolyGrail">
