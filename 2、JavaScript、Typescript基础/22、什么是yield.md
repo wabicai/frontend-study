@@ -3,15 +3,27 @@
 - yield 是 ES6 的新关键字，使生成器函数执行暂停。yield 关键字后面的表达式的值返回给生成器的调用者。它可以被认为是一个基于生成器的版本的 return 关键字
 - 返回一个迭代器对象（IteratorResult），包含两个属性（value 和 done），代表返回值和是否完成。
 - 无法单独工作，需要配合生成器（generator）函数，如 next
+- `Generator`  函数是`协程`在  `ES6`  的实现
+
+> ```javascript
+>
+> function asnycJob() {
+>   // ...其他代码
+>   var f = yield readFile(fileA);
+>   // ...其他代码
+> }
+> ```
+
+上面代码的函数 asyncJob 是一个协程，它的奥妙就在其中的 yield 命令。它表示执行到此处，执行权将交给其他协程。也就是说，yield 命令是异步两个阶段的分界线
 
 ## 简单例子
 
 ```js
 function* test() {
-  var list = [1, 3, 5];
-  for (let index = 0; index < list.length; index++) {
-    yield list[index];
-  }
+	var list = [1, 3, 5];
+	for (let index = 0; index < list.length; index++) {
+		yield list[index];
+	}
 }
 console.log(test);
 
