@@ -1,83 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Document</title>
-	</head>
-	<script>
-		const nums = [5, 1, 1, 2, 0, 0];
-		console.log(sortArray(nums));
-		function sortArray(nums) {
-			function quickSort(start, end) {
-				if (start >= end) return;
-				const pivot = start + Math.floor(Math.random() * (end - start + 1));
-				swap(pivot, start);
-				// .... 排序
-				// start  j i  end
-				// 枢纽  小的  大的
-				let i = start + 1;
-				let j = end;
-				while (i <= j) {
-					while (nums[start] > nums[i]) {
-						i++;
-					}
-					while (nums[start] < nums[j]) {
-						j--;
-					}
-					if (i < j) {
-						swap(i, j);
-						i++;
-						j--;
-					} else {
-						break;
-					}
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Document</title>
+</head>
+<script>
+	function test(obj) {
+		let newObj = {};
+
+		function DFS(keys, value, newObj) {
+			const key = keys.shift();
+			if (keys.length === 0) {
+				newObj[key] = value
+			} else {
+				if (!newObj[key]) {
+					newObj[key] = {}
 				}
-				swap(start, j);
-				quickSort(start, j - 1);
-				quickSort(i, end);
+				DFS(keys, value, newObj[key]);
 			}
-			function swap(i, j) {
-				[nums[i], nums[j]] = [nums[j], nums[i]];
-			}
-			quickSort(0, nums.length - 1);
-			return nums;
 		}
-	</script>
+		for (let index in obj) {
+			let currKeys = index.split(".");
+			let value = obj[index];
+			DFS(currKeys, value, newObj)
+			// let currObj = newObj;
+			// while (currKeys.length) {
+			// 	const key = currKeys.shift();
+			// 	if (currKeys.length === 0) {
+			// 		currObj[key] = value;
+			// 	} else {
+			// 		if (!currObj[key]) {
+			// 			currObj[key] = {};
+			// 		}
+			// 	}
+			// 	currObj = currObj[key];
+			// }
+		}
+		console.log(newObj);
+	}
 
-	<body class="HolyGrail">
-		<div class="father">
-			<div class="left">
-				<ul>
-					<li>1</li>
-				</ul>
-			</div>
-			<div class="right">
-				<ul>
-					<li>1</li>
-					<li>2</li>
-				</ul>
-			</div>
+	let obj = {
+		"a.b.c": 1,
+		"a.d": 2,
+		e: 3,
+	};
+	test(obj);
+</script>
+
+<body class="HolyGrail">
+	<div class="father">
+		<div class="left">
+			<ul>
+				<li>1</li>
+			</ul>
 		</div>
-	</body>
-	<script></script>
-	<style>
-		.father {
-			display: grid;
-			grid-template-columns: 200px 200px;
-			background-color: black;
-			padding: 20px;
-		}
+		<div class="right">
+			<ul>
+				<li>1</li>
+				<li>2</li>
+			</ul>
+		</div>
+	</div>
+</body>
+<script></script>
+<style>
+	.father {
+		display: grid;
+		grid-template-columns: 200px 200px;
+		background-color: black;
+		padding: 20px;
+	}
 
-		.left {
-			background-color: blue;
-			width: 200px;
-		}
+	.left {
+		background-color: blue;
+		width: 200px;
+	}
 
-		.right {
-			width: 200px;
-			background-color: red;
-		}
-	</style>
+	.right {
+		width: 200px;
+		background-color: red;
+	}
+</style>
+
 </html>
