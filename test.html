@@ -27,40 +27,38 @@
 	}
 	console.error(res);
 </script>
-
-<body class="HolyGrail">
-	<div class="father">
-		<div class="left">
-			<ul>
-				<li>1</li>
-			</ul>
-		</div>
-		<div class="right">
-			<ul>
-				<li>1</li>
-				<li>2</li>
-			</ul>
-		</div>
-	</div>
-</body>
-<script></script>
 <style>
-	.father {
-		display: grid;
-		grid-template-columns: 200px 200px;
-		background-color: black;
-		padding: 20px;
-	}
-
-	.left {
-		background-color: blue;
+	#parent {
 		width: 200px;
-	}
-
-	.right {
-		width: 200px;
+		height: 200px;
 		background-color: red;
+		border: 10px solid black;
+		padding: 10px;
+		margin: 10px;
+
+		overflow: auto;
+	}
+
+	#son {
+		width: 300px;
+		height: 300px;
 	}
 </style>
+
+<body>
+	<div id="parent">
+		<div id="son"></div>
+	</div>
+</body>
+
+<script>
+	var clientWidth = window.document.getElementById("parent").clientWidth;
+	var offsetWidth = window.document.getElementById("parent").offsetWidth;
+	var scrollWidth = window.document.getElementById("parent").scrollWidth;
+	console.log(clientWidth);
+	console.log(offsetWidth);
+	console.log(scrollWidth);
+</script>
+
 
 </html>
