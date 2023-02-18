@@ -8,46 +8,24 @@
 	<title>Document</title>
 </head>
 <script>
-	function test(obj) {
-		let newObj = {};
-
-		function DFS(keys, value, newObj) {
-			const key = keys.shift();
-			if (keys.length === 0) {
-				newObj[key] = value
-			} else {
-				if (!newObj[key]) {
-					newObj[key] = {}
-				}
-				DFS(keys, value, newObj[key]);
+	let hourInterval = 360 / 12;
+	// 每一小时多少度
+	let minutesInterval = 360 / 12 / 60;
+	// 每走一分钟，时针走多少度
+	// 每小格多少度
+	let interval = 360 / 12 / 5
+	let res = [];
+	for (let i = 0; i <= 12; i++) {
+		let hour = hourInterval * i;
+		for (let minutes = 0; minutes <= 60; minutes++) {
+			let currHour = hour + minutes * minutesInterval;
+			let currMin = minutes * interval;
+			if (currHour - currMin === 6 || currMin - currHour === 6) {
+				res.push([i, minutes]);
 			}
 		}
-		for (let index in obj) {
-			let currKeys = index.split(".");
-			let value = obj[index];
-			DFS(currKeys, value, newObj)
-			// let currObj = newObj;
-			// while (currKeys.length) {
-			// 	const key = currKeys.shift();
-			// 	if (currKeys.length === 0) {
-			// 		currObj[key] = value;
-			// 	} else {
-			// 		if (!currObj[key]) {
-			// 			currObj[key] = {};
-			// 		}
-			// 	}
-			// 	currObj = currObj[key];
-			// }
-		}
-		console.log(newObj);
 	}
-
-	let obj = {
-		"a.b.c": 1,
-		"a.d": 2,
-		e: 3,
-	};
-	test(obj);
+	console.error(res);
 </script>
 
 <body class="HolyGrail">

@@ -1,26 +1,24 @@
 ## 基础知识
 
-1. ARP协议，发广播，在同一网段，获取MAC地址 （11111会发全部人）
+1. ARP 协议，发广播，在同一网段，获取 MAC 地址 （11111 会发全部人）
 
-2. ARP是有缓存的
+2. ARP 是有缓存的
 
 3. 集线器（hub）也是同一网段，半双工，广播，没有缓存功能，是个智障
 
-4. 网桥有智商，有ARP地址表，能隔离冲突域。记录在左边还是右边
+4. 网桥有智商，有 ARP 地址表，能隔离冲突域。记录在左边还是右边
 
 5. 交换机：网桥+集线器。全双工，局域网的最终方案。可以记住接口对应的位置
-
-
 
 ## 对应的设备
 
 ![image-20201218152522939](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201218152522939.png)
 
-1. 物理层：物理链路。以比特流的方式发送。
+1. 物理层：物理链路。以比特流的方式发送。在这一层，数据的单位称为比特（bit）,负责 0、1 比特流（0/1 序列）与电压的高低、逛的闪灭之间的转换
    1. （网线，集线器，放大器）
-2. 数据链路层：数据链路层地址就是mac地址，称作（帧）
+2. 数据链路层：数据链路层地址就是 mac 地址，称作（帧），对 0 和 1 进行分组，定义数据帧，确认主机的物理地址，传输数据；
    1. （网卡、网桥、交换机）
-   2. （MAC地址）（以太网协议）
+   2. （MAC 地址）（以太网协议）
 3. 网络层：路径选择、路由及逻辑寻址，管理网络地址。
    1. （路由器）（称作数据包）
    2. （IP、ARP）
@@ -28,7 +26,6 @@
    1. （网关）
    2. （三次握手），（TCP、UDP）
 5. 会话层：NFC。负责建立管理、终止进程的会话
-6. 表示层：将看到的页面与二进制转化。数据的压缩、解压等。表现出来就是文件拓展名
+6. 表示层：将看到的页面与二进制转化。数据的压缩、解压等。表现出来就是文件拓展名，这一层的主要作用是定义数据格式和加密。
 7. 应用层：（HTTP、DNS、FTP）协议。确定通信对象。为操作系统提供访问网络的接口
-
-![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAxOC83LzI5LzE2NGU1MjkzMDlmMGZhMzM?x-oss-process=image/format,png)
+   ![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAxOC83LzI5LzE2NGU1MjkzMDlmMGZhMzM?x-oss-process=image/format,png)
