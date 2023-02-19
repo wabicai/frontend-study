@@ -176,12 +176,12 @@ foo 执行的时候，由于内部变量没有定义，所以相当于 window.ba
 
 ```javascript
 var someResource = getData();
-setInterval(function() {
-    var node = document.getElementById('Node');
-    if(node) {
-        // 处理 node 和 someResource
-        node.innerHTML = JSON.stringify(someResource));
-    }
+setInterval(function () {
+	var node = document.getElementById("Node");
+	if (node) {
+		// 处理 node 和 someResource
+		node.innerHTML = JSON.stringify(someResource);
+	}
 }, 1000);
 ```
 
