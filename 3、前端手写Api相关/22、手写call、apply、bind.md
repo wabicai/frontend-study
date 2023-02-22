@@ -23,21 +23,20 @@ bind()方法创建一个新的函数，在bind()被调用时，这个新函数�
 apply的实现：
 	// apply:参数以数组形式传递，apply之后不会改变this指向
     // apply 原理
-    Function.prototype.myApply = function (context) {
-        context = context ? Object(context) : window
-        // 函数调用apply,context的this就指向那个函数。
-        context.fn = this
-        let args = [...arguments][1]
-        if (!args) {
-            // 一定要删除这个this（调用的函数）。
-            const res = context.fn()
-            delete context.fn;
-            return res
-        }
-        let r = context.fn(...args)
-        delete context.fn;
-        return r
-    }
+	Function.prototype.myCall = function (context, ...args) {
+		context = context ? context : window;
+		context.fn = this;
+		if (!args) {
+			// 一定要删除这个this（调用的函数）。
+			let res = context.fn();
+			delete context.fn;
+			delete context.fn;
+			return res
+		}
+		let res = context.fn(...args);
+		delete context.fn;
+		return res;
+	};
 
 call实现：与apply的唯一区别就是参数格式不同
 

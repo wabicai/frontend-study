@@ -8,74 +8,63 @@
 	<title>Document</title>
 </head>
 <script>
-	// let hourInterval = 360 / 12;
-	// // 每一小时多少度
-	// let minutesInterval = 360 / 12 / 60;
-	// // 每走一分钟，时针走多少度
-	// // 每小格多少度
-	// let interval = 360 / 12 / 5
-	// let res = [];
-	// for (let i = 0; i <= 12; i++) {
-	// 	let hour = hourInterval * i;
-	// 	for (let minutes = 0; minutes <= 60; minutes++) {
-	// 		let currHour = hour + minutes * minutesInterval;
-	// 		let currMin = minutes * interval;
-	// 		if (currHour - currMin === 6 || currMin - currHour === 6) {
-	// 			res.push([i, minutes]);
-	// 		}
-	// 	}
-	// }
-	// console.error(res);
-	let timeout = function (i) {
-		// return new Promise((resolve) => {
-		setTimeout(() => {
-			console.error(i, "bafore");
-			// resolve(i);
-		}, i * 1000);
-		// });
-	};
-	async function test() {
-		for (let i = 0; i < 5; i++) {
-			let res = await timeout(i);
-			console.error(res, "after");
-		}
-	}
-	test();
-	// 1 2 3 4 会间隔 1s 2s 3s 4s 打印，并且"after"会被多次打印
-	// 没有promise，会并发，"after"只会被打印一次
 </script>
 <style>
 	#parent {
 		width: 200px;
 		height: 200px;
 		background-color: red;
-		border: 10px solid black;
-		padding: 10px;
-		margin: 10px;
-
-		overflow: auto;
+		position: relative;
 	}
 
 	#son {
-		width: 300px;
-		height: 300px;
+		width: 30px;
+		height: 30px;
+		position: relative;
+		background: #000;
+		left: 20px;
+	}
+
+	#son1 {
+		width: 30px;
+		height: 30px;
+		position: relative;
+		background: blue;
+		left: 20px;
 	}
 </style>
 
 <body>
 	<div id="parent">
 		<div id="son"></div>
+		<div id="son1"></div>
 	</div>
 </body>
 
 <script>
-	var clientWidth = window.document.getElementById("parent").clientWidth;
-	var offsetWidth = window.document.getElementById("parent").offsetWidth;
-	var scrollWidth = window.document.getElementById("parent").scrollWidth;
-	console.log(clientWidth);
-	console.log(offsetWidth);
-	console.log(scrollWidth);
-</script>
+	Function.prototype.myCall = function (context, ...args) {
+		context = context ? context : window;
+		context.fn = this;
+		if (!args) {
+			// 一定要删除这个this（调用的函数）。
+			let res = context.fn();
+			delete context.fn;
+			delete context.fn;
+			return res
+		}
+		let res = context.fn(...args);
+		delete context.fn;
+		return res;
+	};
+	a = 2;
 
+	function test(...args) {
+		console.log(this.a, args);
+	}
+	let obj = {
+		a: 1,
+	};
+	test.myCall(obj, 1, 2, 3);
+</script>
 
 </html>
