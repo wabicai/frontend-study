@@ -8,63 +8,60 @@
 	<title>Document</title>
 </head>
 <script>
+	setTimeout(() => {
+		console.log('1-1'); // 5
+		Promise.resolve().then(() => {
+			console.log('1-2'); // 6
+		})
+	});
+	console.log('2-1'); // 1
+	Promise.resolve().then(() => {
+		console.log('3-1'); // 3
+		setTimeout(() => {
+			console.log('3-2'); //7
+		});
+	})
+	new Promise((resolve) => {
+		console.log('4-1'); // 2
+		resolve()
+	}).then(() => {
+		console.log('4-2'); // 4
+	})
 </script>
+
+<div class="container">
+	　　<div class="item1">元素1</div>
+	　　<div class="item2">元素2</div>
+	　　<div class="item3">元素3</div>
+</div>
 <style>
-	#parent {
+	.container {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+
+	.container div {
 		width: 200px;
-		height: 200px;
-		background-color: red;
-		position: relative;
+		height: 50px;
+		text-align: center;
+		line-height: 50px;
 	}
 
-	#son {
-		width: 30px;
-		height: 30px;
-		position: relative;
-		background: #000;
-		left: 20px;
+	.item1 {
+		background: red;
+		align-self: flex-start;
 	}
 
-	#son1 {
-		width: 30px;
-		height: 30px;
-		position: relative;
-		background: blue;
-		left: 20px;
+	.item2 {
+		background: green;
+		align-self: center;
+	}
+
+	.item3 {
+		background: yellow;
+		align-self: flex-end;
 	}
 </style>
-
-<body>
-	<div id="parent">
-		<div id="son"></div>
-		<div id="son1"></div>
-	</div>
-</body>
-
-<script>
-	Function.prototype.myCall = function (context, ...args) {
-		context = context ? context : window;
-		context.fn = this;
-		if (!args) {
-			// 一定要删除这个this（调用的函数）。
-			let res = context.fn();
-			delete context.fn;
-			delete context.fn;
-			return res
-		}
-		let res = context.fn(...args);
-		delete context.fn;
-		return res;
-	};
-	a = 2;
-
-	function test(...args) {
-		console.log(this.a, args);
-	}
-	let obj = {
-		a: 1,
-	};
-	test.myCall(obj, 1, 2, 3);
-</script>
 
 </html>

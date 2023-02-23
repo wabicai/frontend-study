@@ -104,3 +104,8 @@ footer {
 	height: 50px;
 }
 ```
+
+### 斜向布局
+
+> 父：flex-direction: column;
+> 子：align-self
