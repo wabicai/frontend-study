@@ -20,11 +20,11 @@ function objectFactory(fn, ...args) {
 
 	// 将 this 指向新建对象，并执行函数
 	result = fn.call(newObject, ...args);
-	// 判断返回对象
-	let flag =
-		result && (typeof result === "object" || typeof result === "function");
-	// 判断返回结果
-	return flag ? result : newObject;
+	if (typeof result === "object" || typeof result === "function") {
+		return result;
+	} else {
+		return newObject;
+	}
 }
 // 使用方法
 objectFactory(构造函数, 初始化参数);
