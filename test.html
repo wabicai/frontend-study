@@ -1,26 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <script>
+    const flatArr = [
+      { id: 1, name: "爷爷1", pid: 0 },
+      { id: 2, name: "爷爷2", pid: 0 },
+      { id: 233, name: "儿子1", pid: 12 },
+      { id: 334, name: "儿子2", pid: 21 },
+      { id: 12, name: "爸爸1", pid: 1 },
+      { id: 21, name: "爸爸2", pid: 2 },
+    ];
+    // 简化版
+    // function listToTreeSimple(data) {
+    //   const res = [];
+    //   data.forEach((item) => {
+    //     const parent = data.find((node) => node.id === item.pid);
+    //     if (parent) {
+    //       parent.children = parent.children || [];
+    //       parent.children.push(item);
+    //     } else {
+    //       // * 根节点
+    //       res.push(item);
+    //     }
+    //   });
+    //   console.log(res);
+    // }
+    // listToTreeSimple(flatArr);
 
-<head>
-	<meta charset="UTF-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Document</title>
-</head>
-<script>
-</script>
+    // 使用哈希表版
+    function listToTreeSimple(data) {
+      const res = [];
+      const obj = {};
+      data.forEach((item) => (obj[item.id] = item));
+      data.forEach((item) => {
+        const parent = obj[item.parentId];
+        if (parent) {
+          parent.children = parent.children || [];
+          parent.children.push(item);
+        } else {
+          // * 根节点
+          res.push(item);
+        }
+      });
+      console.log(res);
+    }
+    listToTreeSimple(flatArr);
+  </script>
 
-<div>
-	<p>A</p>
-	<p>B</p>
-</div>
-<style>
-	p {
-		font-size: 16px;
-		line-height: 1;
-		margin-top: 10px;
-		margin-bottom: 15px;
-	}
-</style>
-
+  <div></div>
+  <style></style>
 </html>
