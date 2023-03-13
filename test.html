@@ -7,49 +7,42 @@
     <title>Document</title>
   </head>
   <script>
-    const flatArr = [
-      { id: 1, name: "爷爷1", pid: 0 },
-      { id: 2, name: "爷爷2", pid: 0 },
-      { id: 233, name: "儿子1", pid: 12 },
-      { id: 334, name: "儿子2", pid: 21 },
-      { id: 12, name: "爸爸1", pid: 1 },
-      { id: 21, name: "爸爸2", pid: 2 },
-    ];
-    // 简化版
-    // function listToTreeSimple(data) {
-    //   const res = [];
-    //   data.forEach((item) => {
-    //     const parent = data.find((node) => node.id === item.pid);
-    //     if (parent) {
-    //       parent.children = parent.children || [];
-    //       parent.children.push(item);
-    //     } else {
-    //       // * 根节点
-    //       res.push(item);
-    //     }
-    //   });
-    //   console.log(res);
-    // }
-    // listToTreeSimple(flatArr);
+    function deepcopy(obj, map = new Map()) {
+      // 把函数内变量转为参数使用
+      if (typeof obj !== "object") {
+        return;
+      }
+      let res = Array.isArray(obj) ? [] : {};
 
-    // 使用哈希表版
-    function listToTreeSimple(data) {
-      const res = [];
-      const obj = {};
-      data.forEach((item) => (obj[item.id] = item));
-      data.forEach((item) => {
-        const parent = obj[item.parentId];
-        if (parent) {
-          parent.children = parent.children || [];
-          parent.children.push(item);
-        } else {
-          // * 根节点
-          res.push(item);
+      if (map.get(obj)) {
+        return map.get(obj);
+      }
+      map.set(obj, res);
+      console.log("map", map);
+      for (let key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          if (typeof obj[key] === "object") {
+            res[key] = deepcopy(obj[key], map); // 修改了此处,传入map
+          } else {
+            res[key] = obj[key];
+          }
         }
-      });
-      console.log(res);
+      }
+      return res;
     }
-    listToTreeSimple(flatArr);
+
+    var obj = {
+      a: 1,
+      b: 2,
+      d: {
+        a: 1,
+      },
+    };
+    obj.c = obj;
+    obj.d.b = obj.d;
+
+    var deepcopyObj2 = deepcopy(obj);
+    console.log(obj, deepcopyObj2);
   </script>
 
   <div></div>
